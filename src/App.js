@@ -1,24 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
 
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { BrowserRouter, Route, Routes} from 'react-router-dom';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import RedeemHome from './components/redeem/RedeemHome';
+import Home from './Home';
+
+const theme = createTheme();
+
+const queryClient = new QueryClient();
+queryClient.setDefaultOptions({
+  queries: {
+    useErrorBoundary: true,
+    refetchOnWindowFocus: false
+  }
+});
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={theme}>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Home />}/>
+          <Route path="/swag-drop/:company/:page" element={<RedeemHome />} exact/>
+        </Routes>
+        </BrowserRouter>
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 }
 
