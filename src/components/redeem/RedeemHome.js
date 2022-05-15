@@ -1,15 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-import { FormProvider, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 import _ from 'lodash';
-import * as yup from 'yup';
 import dayjs from 'dayjs';
 import styles from './styles/redeem';
 import CenteredGrid from '../shared/CenteredGrid';
-import { emailRegex, getSchema } from '../../utils/commonValidations';
-import EmployeeForm from '../support/EmployeeForm';
 import { PostMessage, useTempletesStyles } from './redeemCommon';
 import addressesApi from '../../api/swagup/addresses';
 import AddressConfirmation from '../shared/AddressConfirmation';
@@ -19,8 +13,6 @@ import useShippingCutoffHour from '../../hooks/useShippingCutoffHour';
 import { minimumShippingDate } from '../../utils/commonDateFunctions';
 import solutiontriangle from  '../../api/solutiontriangle';
 import log from '../../utils/logger';
-import SwipeableViews from 'react-swipeable-views/lib/SwipeableViews';
-import apiPaths from '../../utils/apiPaths';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import RedeemTemplates from './RedeemTemplate';
@@ -33,13 +25,14 @@ const RedeemHome = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [generalError, setGeneralError] = useState('');
   const [availableSizes, setAvailableSizes] = useState([]);
+  const [formError, setFormError] = useState({});
 
   const [addressVerification, setAddressVerification] = useState({ address: {} });
 
 
   const { company, page } = useParams();
   const { data: redeem } = useQuery('redeems', () => solutiontriangle.getbyslug(`${company}-${page}`), {
-    initialData: { theme: {} },
+    initialData: { theme: {}, products: [] },
     enabled: !!(company && page)
   });
 
@@ -88,7 +81,7 @@ const RedeemHome = () => {
 
   const prepareError = errorData => {
     const fields = Object.keys(errorData);
-    fields.forEach(field => setError(field, { type: 'validate', message: errorData[field][0] }, { shouldFocus: true }));
+    fields.forEach(field => setFormError(field, { type: 'validate', message: errorData[field][0] }, { shouldFocus: true }));
   };
 
   const textWorkOut = (obj, callback) => (obj.length ? obj : callback(obj[Object.keys(obj)[0]]));
@@ -162,6 +155,11 @@ const RedeemHome = () => {
           <RedeemTemplates
             redeem={redeem}
             onSwagDrop={onSwagDrop}
+            generalError={generalError}
+            formError={formError}
+            availableSizes={availableSizes}
+            currentStep={currentStep}
+            handleONext={handleONext}
           />
         )}
          <AddressConfirmation

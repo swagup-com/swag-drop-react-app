@@ -1,4 +1,3 @@
-export { default as accountOrdersApi } from './accountOrders';
 export { default as accountProductsApi } from './accountProducts';
 export { default as addressesApi } from './addresses';
 export { default as contactsApi } from './contacts';
