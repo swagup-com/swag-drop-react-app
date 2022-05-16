@@ -6,9 +6,9 @@ import * as yup from 'yup';
 import { FormProvider, useForm } from "react-hook-form";
 import SwipeableViews from "react-swipeable-views/lib/SwipeableViews";
 import { emailRegex, getSchema } from "../../utils/commonValidations";
-import EmployeeForm from "../support/EmployeeForm";
+import ContactForm from "../support/ContactForm";
 import { getPagePath, PostMessage, useTempletesStyles } from "./redeemCommon";
-import { Button } from "@swagup-com/components";
+import { Button } from '@swagup-com/react-ds-components';
 
 
   
@@ -81,7 +81,7 @@ const RedeemTemplates = ({ redeem, onSwagDrop, handleONext, currentStep,
           <SwipeableViews axis="x" index={currentStep - 1} className={classes.swipeableViews} disabled>
             <div>
               <Grid container>
-                <Grid item xs={6}>
+                <Grid item sm={6} xs={12}>
                   <p className={classes.headerText}>{header}</p>
                   <p className={classes.subtitle}>{subtitle}</p>
                   <Button variant="primary" className={classes.button} onClick={handleONext}>
@@ -92,7 +92,7 @@ const RedeemTemplates = ({ redeem, onSwagDrop, handleONext, currentStep,
                     to COVID-19, shipments may take longer than usual. Thank you for your patience & understanding.
                   </p>
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item sm={6} xs={12}>
                   <Grid container alignContent="center" style={{ height: '100%', paddingLeft: 32 }}>
                     <div className={classes.productContainer}>
                       <img src={product} alt={name} className={classes.product} />
@@ -110,7 +110,7 @@ const RedeemTemplates = ({ redeem, onSwagDrop, handleONext, currentStep,
                 </Grid>
                 {currentStep === 2 && (
                   <FormProvider {...formMethods}>
-                    <EmployeeForm
+                    <ContactForm
                       fixedCountry={!redeem.isInternational}
                       noCompany
                       noTitle

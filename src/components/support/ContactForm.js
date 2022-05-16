@@ -5,7 +5,7 @@ import { zipCodeText, normalizeUSZip } from '../../utils/utils';
 import { TextField, SelectField, PhoneField } from '../shared/reactHookFormFields';
 import { useCountries, useMemoizeStateFields, useSizes } from '../../hooks';
 
-const EmployeeForm = ({ justAddress, fixedCountry, noCompany, noTitle, hideSizes, availableSizes }) => {
+const ContactForm = ({ justAddress, fixedCountry, noCompany, noTitle, hideSizes, availableSizes }) => {
   const { control, formState, register, setValue, trigger, watch, getValues } = useFormContext();
   const { errors, touchedFields } = formState;
   const [country, state] = watch(['shipping_country', 'shipping_state']);
@@ -41,7 +41,7 @@ const EmployeeForm = ({ justAddress, fixedCountry, noCompany, noTitle, hideSizes
   };
 
   return (
-    <Grid container>
+    <Grid container spacing={4}>
       <Grid item xs={justAddress ? 6 : 12}>
         <SelectField
           name="shipping_country"
@@ -62,7 +62,7 @@ const EmployeeForm = ({ justAddress, fixedCountry, noCompany, noTitle, hideSizes
       </Grid>
       {!justAddress && (
         <>
-          <Grid style={{ paddingRight: 12 }} item xs={6}>
+          <Grid item xs={6}>
             <TextField
               fullWidth
               placeholder="First name"
@@ -72,7 +72,7 @@ const EmployeeForm = ({ justAddress, fixedCountry, noCompany, noTitle, hideSizes
               {...register('first_name', { deps: ['last_name'] })}
             />
           </Grid>
-          <Grid item style={{ paddingLeft: 12 }} xs={6}>
+          <Grid item xs={6}>
             <TextField
               fullWidth
               placeholder="Last name"
@@ -82,16 +82,16 @@ const EmployeeForm = ({ justAddress, fixedCountry, noCompany, noTitle, hideSizes
             />
           </Grid>
           {!noCompany && (
-            <Grid item style={{ paddingRight: 12 }} xs={6}>
+            <Grid item  xs={6}>
               <TextField fullWidth placeholder="Company name" autoComplete="company" {...register('company')} />
             </Grid>
           )}
           {!noTitle && (
-            <Grid style={{ paddingLeft: 12 }} item xs={6}>
+            <Grid item xs={6}>
               <TextField fullWidth placeholder="Title" autoComplete="title" {...register('title')} />
             </Grid>
           )}
-          <Grid item style={{ paddingRight: 12 }} xs={6}>
+          <Grid item  xs={6}>
             <TextField
               fullWidth
               placeholder="Email address"
@@ -102,7 +102,7 @@ const EmployeeForm = ({ justAddress, fixedCountry, noCompany, noTitle, hideSizes
           </Grid>
         </>
       )}
-      <Grid item style={{ paddingLeft: 12 }} xs={6}>
+      <Grid item xs={6}>
         <PhoneField
           name="phone_number"
           error={errors.phone_number?.message}
@@ -164,7 +164,7 @@ const EmployeeForm = ({ justAddress, fixedCountry, noCompany, noTitle, hideSizes
           {...register('shipping_city')}
         />
       </Grid>
-      <Grid item style={{ paddingRight: 12 }} xs={6}>
+      <Grid item  xs={6}>
         {provinces.length === 0 ? (
           <TextField
             placeholder="State / Province / Region"
@@ -192,7 +192,7 @@ const EmployeeForm = ({ justAddress, fixedCountry, noCompany, noTitle, hideSizes
           </SelectField>
         )}
       </Grid>
-      <Grid item style={{ paddingLeft: 12 }} xs={6}>
+      <Grid item xs={6}>
         <TextField
           {...register('shipping_zip')}
           onInput={handleChangeZip}
@@ -206,4 +206,4 @@ const EmployeeForm = ({ justAddress, fixedCountry, noCompany, noTitle, hideSizes
   );
 };
 
-export default EmployeeForm;
+export default ContactForm;

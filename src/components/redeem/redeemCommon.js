@@ -1,14 +1,34 @@
 import React from 'react';
-import { Grid, Button } from '@mui/material';
+import { Grid } from '@mui/material';
 import { makeStyles } from '@mui/styles';
-// import { Button, TextField } from '@swagup-com/components';
+import { Button } from '@swagup-com/react-ds-components';
 
 const defaultText = ({ color, fontFamily }) => ({
   fontFamily: fontFamily || 'Gilroy',
   color: color || '#0b1829',
   margin: 0
 });
-const templateStyles = () => ({
+
+const standardMediaQueries = (theme, fontSize, marginBottom) => ({
+  [theme.breakpoints.down(1025)]: {
+    fontSize: fontSize * 0.8,
+    marginBottom: marginBottom * 0.8
+  },
+  [theme.breakpoints.down(912)]: {
+    fontSize: fontSize * 0.7,
+    marginBottom: marginBottom * 0.7
+  },
+  [theme.breakpoints.down('md')]: {
+    fontSize: fontSize * 0.5,
+    marginBottom: marginBottom * 0.5
+  },
+  [theme.breakpoints.down('xs')]: {
+    fontSize: fontSize * 0.3,
+    marginBottom: marginBottom * 0.3
+  }
+});
+
+const templateStyles = theme => ({
   root: {
     position: 'relative',
     background: ({ background }) => background || 'transparent',
@@ -30,9 +50,12 @@ const templateStyles = () => ({
     width: '100%',
     objectFit: 'contain'
   },
-  headerText: props => ({ ...defaultText(props), fontSize: 72, marginBottom: 24, fontWeight: 700 }),
-  subtitle: props => ({ ...defaultText(props), fontSize: 20, fontWeight: 400, marginBottom: 24 }),
-  advisory: props => ({ ...defaultText(props), fontSize: 14, marginTop: 32, marginBottom: 56 }),
+  headerText: props => ({ ...defaultText(props), fontSize: 72, marginBottom: 24, fontWeight: 700,
+    ...standardMediaQueries(theme, 72, 24) }),
+  subtitle: props => ({ ...defaultText(props), fontSize: 20, fontWeight: 400, marginBottom: 24,
+    ...standardMediaQueries(theme, 20, 24) }),
+  advisory: props => ({ ...defaultText(props), fontSize: 14, marginTop: 32, marginBottom: 56,
+    ...standardMediaQueries(theme, 14, 56) }),
   productContainer: {
     width: '100%',
     height: 320
@@ -45,8 +68,9 @@ const templateStyles = () => ({
   button: {
     marginTop: 24,
     marginLeft: 4,
-    padding: '16px 42px !important',
-    fontSize: 20,
+    // padding: '16px 42px !important',
+    minWidth: '212px !important',
+    '&:disabled': { backgroundColor: 'rgba(0, 0, 0, 0.26) !important' },
     backgroundColor: ({ accent }) => (`${accent || '#3577d4'} !important`),
     color: '#ffffff',
     borderRadius: '32px !important',

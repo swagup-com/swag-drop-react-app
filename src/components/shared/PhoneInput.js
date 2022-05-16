@@ -1,73 +1,52 @@
 import * as React from 'react';
 import ReactPhoneInput, { getCountries, getCountryCallingCode } from 'react-phone-number-input';
-import { TextField as MuiTextField, makeStyles, Grid, Box } from '@material-ui/core';
-import { TextField } from '@swagup-com/components';
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import PublicIcon from '@material-ui/icons/Public';
+import { TextField, Grid, Box, Autocomplete, Paper as MuiPaper, styled } from '@mui/material';
+import PublicIcon from '@mui/icons-material/Public';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { scrollBar } from './styles/commonStyles';
 
-const useCountrySelectStyles = makeStyles({
+const getCountrySelectStyles = ({ open, error }) => ({
   container: {
     position: 'absolute',
-    top: ({ variant }) => (variant === 'outlined' ? '0' : 'unset'),
-    bottom: ({ variant, error }) => (!variant && error ? 23 : 0),
+    top: 0,
+    bottom: error ? 23 : 0,
     left: 0,
     zIndex: 1,
-    height: 'max-content',
-    width: ({ open }) => open && '100%',
+    height: 'fit-content',
+    width: open ? '100%' : 'fit-content',
     '& + div': {
-      opacity: ({ open }) => open && 0
+      opacity: open && 0
     }
   },
   textField: {
     width: '100%',
+    padding: '0 !important',
     '&:focus': {
       borderRadius: '35px 0 0 35px',
       boxShadow: '0px 0px 2px 2px #3577d4',
       outline: 0
     },
+    '& .MuiInputBase-root': {
+      paddingLeft: '30px !important',
+      paddingRight: '0 !important',
+      cursor: open ? 'unset' : 'pointer',
+      backgroundColor: open ? '#fff' : 'unset',
+      '& .MuiOutlinedInput-notchedOutline, &:hover .MuiOutlinedInput-notchedOutline': {
+        border: !open && 'none'
+      }
+    },
     '& .MuiInputBase-input': {
-      visibility: ({ open }) => (open ? 'visible' : 'hidden'),
-      minWidth: 0
+      minWidth: '0 !important',
+
+      mx: open ? 2.5 : 0,
+      padding: '10px 0 !important'
     },
     '& .PhoneInputCountryIcon': {
       minWidth: 24,
       height: 16
     }
   },
-  inputBase: {
-    paddingRight: '0 !important',
-    cursor: ({ open }) => (open ? 'unset' : 'pointer')
-  },
-  inputBaseOutlined: {
-    paddingLeft: '30px !important',
-    paddingRight: '0 !important',
-    cursor: ({ open }) => (open ? 'unset' : 'pointer'),
-    backgroundColor: ({ open }) => (open ? '#fff' : 'unset'),
-    '&:hover $notchedOutline': {
-      border: ({ open }) => !open && 'none'
-    }
-  },
-  inputBaseInput: {
-    marginLeft: ({ open }) => (open ? 10 : 0),
-    paddingLeft: '2px !important',
-    paddingRight: '0 !important'
-  },
-  inputBaseUnderline: {
-    paddingBottom: '3px !important',
-    '&:before': {
-      borderBottom: ({ open }) => (open ? '1px solid rgba(0, 0, 0, 0.42)' : '0')
-    },
-    '&:hover:not(.Mui-disabled):before': {
-      borderBottom: ({ open }) => (open ? '2px solid rgba(0, 0, 0, 0.87)' : '0')
-    }
-  },
-  notchedOutline: {
-    border: ({ open }) => !open && 'none'
-  },
-  paper: { padding: '10px 5px' },
-  listbox: { ...scrollBar },
+  listbox: scrollBar,
   menuItem: {
     color: '#0f2440',
     '& mark': {
@@ -77,8 +56,13 @@ const useCountrySelectStyles = makeStyles({
     },
     '& .PhoneInputCountryIcon': { display: 'flex' },
     '& .PhoneInputCountryIconImg': { width: 24, height: 16 }
-  }
+  },
+  autoComplete: { zIndex: 1 }
 });
+
+const Paper = styled(MuiPaper)`
+  padding: 10px 5px;
+`;
 
 const handleSearch = (opts, state) => {
   const { inputValue = '', getOptionLabel } = state;
@@ -124,19 +108,17 @@ const getHighlightedLabel = (label, search) => {
 };
 
 const CountrySelect = React.forwardRef(
-  ({ options, onChange, onSelect, value, phoneValue, iconComponent: Icon, disabled, variant, meta, ...props }, ref) => {
+  ({ options, onChange, onSelect, value, iconComponent: Icon, disabled, meta, ...props }, ref) => {
     const [isInputOpen, setIsInputOpen] = React.useState(false);
     const [isListOpen, setIsListOpen] = React.useState(false);
     const [searchValue, setSearchValue] = React.useState('');
-    const inputRef = React.useRef();
 
-    const classes = useCountrySelectStyles({ open: isInputOpen, variant, error: meta?.error });
+    const styles = getCountrySelectStyles({ open: isInputOpen, error: meta?.error });
 
     React.useLayoutEffect(() => {
       if (isInputOpen) {
         setSearchValue('');
         setIsListOpen(isInputOpen);
-        setTimeout(() => inputRef.current.focus(), 0);
       } else setIsListOpen(isInputOpen);
     }, [isInputOpen]);
 
@@ -156,24 +138,10 @@ const CountrySelect = React.forwardRef(
       }
     };
 
-    const Input = variant === 'outlined' ? TextField : MuiTextField;
-    const inputClasses =
-      variant === 'outlined'
-        ? {
-            root: classes.inputBaseOutlined,
-            notchedOutline: classes.notchedOutline,
-            input: classes.inputBaseInput
-          }
-        : {
-            root: classes.inputBase,
-            underline: classes.inputBaseUnderline,
-            input: classes.inputBaseInput
-          };
-
     const selected = (value && options.find(opt => opt.value === value)) || null;
 
     return (
-      <div className={classes.container}>
+      <Box sx={styles.container}>
         <Autocomplete
           inputValue={searchValue}
           open={isListOpen}
@@ -183,28 +151,25 @@ const CountrySelect = React.forwardRef(
           options={options.filter(opt => opt.value)}
           filterOptions={handleSearch}
           getOptionLabel={option => option.label}
-          renderOption={(option, state) => {
-            const { inputValue } = state;
-            const highlightedLabel = getHighlightedLabel(option.label, inputValue);
+          renderOption={(optProps, { label, value }) => {
+            const highlightedLabel = getHighlightedLabel(label, searchValue);
             return (
-              <Grid container justifyContent="space-between" className={classes.menuItem}>
+              <Grid container justifyContent="space-between" sx={styles.menuItem} {...optProps} component="li">
                 <Box display="flex" flex={1} alignItems="center">
-                  <Icon country={option.value} label={option.label} />
+                  <Icon country={value} label={label} />
                   <span style={{ marginLeft: 10 }}>{highlightedLabel}</span>
                 </Box>
-                {option.value && <span>+{getCountryCallingCode(option.value)}</span>}
+                {value && <span>+{getCountryCallingCode(value)}</span>}
               </Grid>
             );
           }}
           renderInput={params => (
-            <Input
+            <TextField
               {...params}
-              inputRef={inputRef}
               placeholder="Search country"
-              className={classes.textField}
+              sx={styles.textField}
               InputProps={{
                 ...params.InputProps,
-                classes: inputClasses,
                 startAdornment: value ? <Icon country={value} label="" /> : <PublicIcon />,
                 endAdornment: !isInputOpen && <KeyboardArrowDownIcon />,
                 inputProps: { ...params.inputProps, autoComplete: 'one-time-code' }
@@ -217,31 +182,29 @@ const CountrySelect = React.forwardRef(
             />
           )}
           onClose={() => setIsInputOpen(false)}
-          classes={{ listbox: classes.listbox, paper: classes.paper }}
+          PaperComponent={Paper}
+          ListboxProps={{ sx: styles.listbox }}
+          sx={styles.autoComplete}
         />
-      </div>
+      </Box>
     );
   },
   { displayName: 'CountrySelect' }
 );
 
-const useCustomInputStyles = makeStyles({
-  root: { width: '100%' },
-  inputBase: { paddingLeft: ({ variant }) => (variant === 'outlined' ? 0 : 58) },
-  inputBaseInput: { paddingLeft: ({ variant }) => (variant === 'outlined' ? 86 : 0) },
-  inputLabel: {
-    paddingLeft: 58,
-    whiteSpace: 'nowrap'
-  },
-  inputLabelShrink: { paddingLeft: 0 }
-});
+const customInputStyles = {
+  root: {
+    width: '100%',
+    '& .MuiInputBase-root': { paddingLeft: 0 },
+    '& .MuiInputBase-input': { paddingLeft: 21.5 },
+    '& .MuiInputLabel-root': { paddingLeft: 14.5, whiteSpace: 'nowrap' },
+    '& .MuiInputLabel-shrink': { paddingLeft: 0 }
+  }
+};
 
 const PhoneNumberInput = React.forwardRef(
-  ({ variant, meta, withTooltip, inputRef, ...props }, ref) => {
+  ({ meta, withTooltip, inputRef, ...props }, ref) => {
     const error = meta?.error;
-    const { root, inputBase, inputLabel, inputLabelShrink, inputBaseInput } = useCustomInputStyles({ variant });
-    const Input = variant === 'outlined' ? TextField : MuiTextField;
-
     const [localRef, setLocalRef] = React.useState();
     const setRef = React.useCallback(
       newRef => {
@@ -255,14 +218,12 @@ const PhoneNumberInput = React.forwardRef(
     React.useImperativeHandle(inputRef, () => ({ ref: localRef, value, onChange }));
 
     return (
-      <Input
+      <TextField
         {...props}
         inputRef={setRef}
-        className={root}
-        InputProps={{ classes: { root: inputBase, input: inputBaseInput } }}
-        InputLabelProps={{ classes: { root: inputLabel, shrink: inputLabelShrink } }}
         error={Boolean(error)}
         helperText={(!withTooltip && error) || ''}
+        sx={customInputStyles.root}
       />
     );
   },
@@ -271,7 +232,7 @@ const PhoneNumberInput = React.forwardRef(
 
 const countryCodes = getCountries().map(country => `+${getCountryCallingCode(country)}`);
 
-const PhoneInputHook = ({ country = 'US', label, variant, meta, withTooltip, width = '100%', onChange, ...props }) => {
+const PhoneInput = ({ country = 'US', label, variant, meta, withTooltip, width = '100%', onChange, ...props }) => {
   const countryRef = React.useRef();
   const phoneInputRef = React.useRef();
   const prevCountry = React.useRef(country);
@@ -328,75 +289,6 @@ const PhoneInputHook = ({ country = 'US', label, variant, meta, withTooltip, wid
       {...props}
     />
   );
-};
-
-const PhoneInputRedux = ({
-  country = 'US',
-  onChange,
-  label,
-  variant,
-  meta,
-  withTooltip,
-  width = '100%',
-  onBlur,
-  ...props
-}) => {
-  const countryRef = React.useRef();
-  const phoneInputRef = React.useRef();
-  const prevCountry = React.useRef(country);
-  const isFirstRender = React.useRef(true);
-
-  React.useEffect(() => {
-    isFirstRender.current = false;
-  }, []);
-
-  const handleChange = newValue => onChange(newValue || '');
-
-  const handleCountryChange = newCountry => {
-    if (newCountry) {
-      prevCountry.current = newCountry;
-    } else if (phoneInputRef.current.value[0] !== '+' || phoneInputRef.current.value.length === 1) {
-      countryRef.current.onChange(prevCountry.current);
-    }
-  };
-
-  const handleCountrySelect = newCountry => {
-    const { value: prevNumber } = phoneInputRef.current;
-    if (!prevNumber) return;
-
-    const isCountryCode = countryCodes.some(code => code.startsWith(prevNumber));
-    if (prevNumber.startsWith('+') && !isCountryCode) {
-      const newPhone = `+${getCountryCallingCode(newCountry)}${prevNumber.slice(1).replace(/\s/g, '')}`;
-      setTimeout(onChange, 0, newPhone);
-    }
-  };
-
-  return (
-    <ReactPhoneInput
-      defaultCountry={isFirstRender.current ? country : undefined}
-      placeholder="Enter phone number"
-      onChange={handleChange}
-      onCountryChange={handleCountryChange}
-      inputComponent={PhoneNumberInput}
-      numberInputProps={{
-        label,
-        variant,
-        meta,
-        withTooltip,
-        inputRef: phoneInputRef
-      }}
-      countrySelectComponent={CountrySelect}
-      countrySelectProps={{ variant, meta, ref: countryRef, onSelect: handleCountrySelect }}
-      displayInitialValueAsLocalNumber
-      style={{ position: 'relative', width, zIndex: 2 }}
-      {...props}
-    />
-  );
-};
-
-const PhoneInput = props => {
-  const { control } = props;
-  return control ? <PhoneInputHook {...props} /> : <PhoneInputRedux {...props} />;
 };
 
 export default PhoneInput;

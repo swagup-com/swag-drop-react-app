@@ -1,8 +1,9 @@
 import React from 'react';
-import { Grid, Modal, Typography, Box, Paper, Button } from '@mui/material';
+import { Grid, Modal, Typography, Box, Paper } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import CloseIcon from '@mui/icons-material/Close';
 import { joinFields } from '../../utils/utils';
+import { Button } from '@swagup-com/react-ds-components';
 
 const useStyles = makeStyles(theme => ({
   actionsContainer: {
@@ -40,7 +41,7 @@ const useStyles = makeStyles(theme => ({
   },
   paper: {
     position: 'absolute',
-    width: 780,
+    width: '780px !important',
     backgroundColor: '#ffffff',
     boxShadow: '0px 3px 5px -1px rgba(0,0,0,0.2), 0px 5px 8px 0px rgba(0,0,0,0.14), 0px 1px 14px 0px rgba(0,0,0,0.12)',
     outline: 'none',

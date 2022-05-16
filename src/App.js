@@ -1,9 +1,11 @@
 
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter, Route, Routes} from 'react-router-dom';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
+import { createTheme } from '@swagup-com/react-ds-components';
 import RedeemHome from './components/redeem/RedeemHome';
 import Home from './Home';
+import { CssBaseline } from '@mui/material';
 
 const theme = createTheme();
 
@@ -17,6 +19,7 @@ queryClient.setDefaultOptions({
 function App() {
   return (
     <ThemeProvider theme={theme}>
+      <CssBaseline />
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
         <Routes>
