@@ -31,8 +31,8 @@ const templateStyles = () => ({
     objectFit: 'contain'
   },
   headerText: props => ({ ...defaultText(props), fontSize: 72, marginBottom: 24, fontWeight: 700 }),
-  subtitle: props => ({ ...defaultText(props), fontSize: 20, fontWeight: 400 }),
-  advisory: props => ({ ...defaultText(props), fontSize: 14, marginTop: 24, marginBottom: 56 }),
+  subtitle: props => ({ ...defaultText(props), fontSize: 20, fontWeight: 400, marginBottom: 24 }),
+  advisory: props => ({ ...defaultText(props), fontSize: 14, marginTop: 32, marginBottom: 56 }),
   productContainer: {
     width: '100%',
     height: 320
@@ -43,12 +43,16 @@ const templateStyles = () => ({
     objectFit: 'contain'
   },
   button: {
-    marginTop: 56,
-    padding: '32px 50px',
+    marginTop: 24,
+    marginLeft: 4,
+    padding: '16px 42px',
     fontSize: 20,
-    background: ({ accent }) => accent || '#3577d4',
+    backgroundColor: ({ accent }) => accent || '#3577d4',
     color: '#ffffff',
-    borderRadius: 32
+    borderRadius: 32,
+    '& span': {
+      color: '#ffffff'
+    }
   },
   shipSwagFormContainer: {
     padding: '24px 142px',
