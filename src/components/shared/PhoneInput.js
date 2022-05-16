@@ -1,12 +1,11 @@
 import * as React from 'react';
 import ReactPhoneInput, { getCountries, getCountryCallingCode } from 'react-phone-number-input';
-import { TextField, Grid, Box } from '@mui/material';
-import { makeStyles } from '@mui/styles';
-// import { TextField } from '@swagup-com/components';
-import Autocomplete from '@mui/material/Autocomplete';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import PublicIcon from '@mui/icons-material/Public';
-import { scrollBar } from '../shared/styles/commonStyles';
+import { TextField as MuiTextField, makeStyles, Grid, Box } from '@material-ui/core';
+import { TextField } from '@swagup-com/components';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import PublicIcon from '@material-ui/icons/Public';
+import { scrollBar } from './styles/commonStyles';
 
 const useCountrySelectStyles = makeStyles({
   container: {
@@ -157,8 +156,7 @@ const CountrySelect = React.forwardRef(
       }
     };
 
-   // const Input = variant === 'outlined' ? TextField : MuiTextField;
-    const Input = TextField;
+    const Input = variant === 'outlined' ? TextField : MuiTextField;
     const inputClasses =
       variant === 'outlined'
         ? {
@@ -242,8 +240,8 @@ const PhoneNumberInput = React.forwardRef(
   ({ variant, meta, withTooltip, inputRef, ...props }, ref) => {
     const error = meta?.error;
     const { root, inputBase, inputLabel, inputLabelShrink, inputBaseInput } = useCustomInputStyles({ variant });
-    // const Input = variant === 'outlined' ? TextField : MuiTextField;
-    const Input = TextField;
+    const Input = variant === 'outlined' ? TextField : MuiTextField;
+
     const [localRef, setLocalRef] = React.useState();
     const setRef = React.useCallback(
       newRef => {

@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import NumberFormat from 'react-number-format';
-// import { TextField as MuiTextField } from '@swagup-com/components';
-import { Tooltip as MuiTooltip, TextField as MuiTextField } from '@mui/material';
+import { TextField as MuiTextField } from '@swagup-com/components';
+import { Tooltip as MuiTooltip } from '@mui/material';
 import { withStyles, makeStyles } from '@mui/styles';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Controller } from 'react-hook-form';
@@ -163,9 +163,9 @@ const SelectField = withStyles(styles)(
               InputLabelProps={{
                 shrink: hideLabel ? false : Boolean(value),
                 className: classes.labelInput,
-                style: { display: hideLabel && Boolean(value) ? 'none' : 'unset', color: '#bdbdbd' }
+                style: { display: hideLabel && Boolean(value) ? 'none' : 'unset', color: '#bdbdbd', top: 'auto' }
               }}
-              style={!withTooltip ? { paddingTop: 5, paddingBottom: error ? 0 : 23 } : undefined}
+              style={!withTooltip ? { paddingBottom: error ? 0 : 23 } : undefined}
               onChange={handleSelect}
               onBlur={onBlur}
             />

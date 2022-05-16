@@ -102,7 +102,7 @@ const EmployeeForm = ({ justAddress, fixedCountry, noCompany, noTitle, hideSizes
           </Grid>
         </>
       )}
-      <Grid item style={{ paddingLeft: 12, paddingTop: 5 }} xs={6}>
+      <Grid item style={{ paddingLeft: 12 }} xs={6}>
         <PhoneField
           name="phone_number"
           error={errors.phone_number?.message}

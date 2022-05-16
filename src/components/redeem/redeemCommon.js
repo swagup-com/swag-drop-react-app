@@ -45,13 +45,14 @@ const templateStyles = () => ({
   button: {
     marginTop: 24,
     marginLeft: 4,
-    padding: '16px 42px',
+    padding: '16px 42px !important',
     fontSize: 20,
-    backgroundColor: ({ accent }) => accent || '#3577d4',
+    backgroundColor: ({ accent }) => (`${accent || '#3577d4'} !important`),
     color: '#ffffff',
-    borderRadius: 32,
+    borderRadius: '32px !important',
     '& span': {
-      color: '#ffffff'
+      color: '#ffffff',
+      fontWeight: 700
     }
   },
   shipSwagFormContainer: {
