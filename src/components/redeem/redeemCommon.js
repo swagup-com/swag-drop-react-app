@@ -101,8 +101,11 @@ const PostMessage = ({ classes, title, excerpt, handleONext }) => (
     </Grid>
   </div>
 );
+const prepare = text => text.toLowerCase().replaceAll(' ', '-');
+const getPagePath = ({ company, name }) => company && name ? `/swag-drop/${prepare(company)}/${prepare(name)}` : '/';
 
 export {
   useTempletesStyles,
-  PostMessage
+  PostMessage,
+  getPagePath
 };

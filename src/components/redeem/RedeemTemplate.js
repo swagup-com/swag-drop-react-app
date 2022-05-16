@@ -7,7 +7,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import SwipeableViews from "react-swipeable-views/lib/SwipeableViews";
 import { emailRegex, getSchema } from "../../utils/commonValidations";
 import EmployeeForm from "../support/EmployeeForm";
-import { PostMessage, useTempletesStyles } from "./redeemCommon";
+import { getPagePath, PostMessage, useTempletesStyles } from "./redeemCommon";
 import { Button } from "@swagup-com/components";
 
 
@@ -71,9 +71,11 @@ const RedeemTemplates = ({ redeem, onSwagDrop, handleONext, currentStep,
     return (
       <Grid container direction="column" className={classes.root}>
         <Grid item className={classes.header}>
-          <div className={classes.logoContainer}>
-            <img src={logo} alt={name} className={classes.logo} />
-          </div>
+            <a href={getPagePath(redeem)}>
+                <div className={classes.logoContainer}>
+                    <img src={logo} alt={name} className={classes.logo} />
+                </div>
+            </a>
         </Grid>
         <Grid item container alignItems="center" xs>
           <SwipeableViews axis="x" index={currentStep - 1} className={classes.swipeableViews} disabled>
