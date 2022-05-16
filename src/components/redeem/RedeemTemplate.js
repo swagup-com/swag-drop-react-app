@@ -93,7 +93,7 @@ const RedeemTemplates = ({ redeem, onSwagDrop, handleONext, currentStep,
                   </p>
                 </Grid>
                 <Grid item sm={6} xs={12}>
-                  <Grid container alignContent="center" style={{ height: '100%', paddingLeft: 32 }}>
+                  <Grid container alignContent="center" style={{ height: '100%' }}>
                     <div className={classes.productContainer}>
                       <img src={product} alt={name} className={classes.product} />
                     </div>

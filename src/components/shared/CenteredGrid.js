@@ -11,14 +11,8 @@ const styles = theme => ({
     [theme.breakpoints.only('lg')]: {
       width: 1200
     },
-    [theme.breakpoints.only('md')]: {
-      width: 900
-    },
-    [theme.breakpoints.only('sm')]: {
-      width: 600
-    },
-    [theme.breakpoints.only('xs')]: {
-      width: 320
+    [theme.breakpoints.down('md')]: {
+      width: '100%'
     }
   }
 });

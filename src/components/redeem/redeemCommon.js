@@ -11,20 +11,26 @@ const defaultText = ({ color, fontFamily }) => ({
 
 const standardMediaQueries = (theme, fontSize, marginBottom) => ({
   [theme.breakpoints.down(1025)]: {
+    fontSize: fontSize * 0.9,
+    marginBottom: marginBottom * 0.9
+  },
+  [theme.breakpoints.down(913)]: {
     fontSize: fontSize * 0.8,
     marginBottom: marginBottom * 0.8
   },
-  [theme.breakpoints.down(912)]: {
+  [theme.breakpoints.down(769)]: {
     fontSize: fontSize * 0.7,
-    marginBottom: marginBottom * 0.7
+    marginBottom: marginBottom * 0.7,
+    lineHeight: 1.3
   },
-  [theme.breakpoints.down('md')]: {
-    fontSize: fontSize * 0.5,
-    marginBottom: marginBottom * 0.5
+  [theme.breakpoints.down(541)]: {
+    fontSize: fontSize * 0.7,
+    marginBottom: marginBottom * 0.7,
+    textAlign: 'center'
   },
-  [theme.breakpoints.down('xs')]: {
-    fontSize: fontSize * 0.3,
-    marginBottom: marginBottom * 0.3
+  [theme.breakpoints.down(391)]: {
+    fontSize: fontSize * 0.6,
+    marginBottom: marginBottom * 0.6  
   }
 });
 
@@ -35,7 +41,20 @@ const templateStyles = theme => ({
     padding: '0px 24px',
     flexDirection: 'column',
     display: 'flex',
-    minHeight: '100vh'
+    minHeight: '100vh',
+  [theme.breakpoints.down(1025)]: {
+    padding: '0px 32px'
+  },
+  [theme.breakpoints.down(913)]: {
+    padding: '0px 24px'
+  },
+  [theme.breakpoints.down(541)]: {
+    padding: '0px 16px',
+    textAlign: 'center'
+  },
+  [theme.breakpoints.down(391)]: {
+    padding: '0px 8px'
+  }
   },
   header: {
     paddingTop: '16px'
@@ -43,7 +62,23 @@ const templateStyles = theme => ({
   logoContainer: {
     width: 156,
     height: 92,
-    position: 'relative'
+    position: 'relative',
+    [theme.breakpoints.down(1025)]: {
+      width: 132,
+      height: 72
+    },
+    [theme.breakpoints.down(913)]: {
+      width: 124,
+      height: 64
+    },
+    [theme.breakpoints.down(541)]: {
+      width: 112,
+      height: 56
+    },
+    [theme.breakpoints.down(391)]: {
+      width: 92,
+      height: 42
+    }
   },
   logo: {
     height: '100%',
@@ -58,7 +93,13 @@ const templateStyles = theme => ({
     ...standardMediaQueries(theme, 14, 56) }),
   productContainer: {
     width: '100%',
-    height: 320
+    height: 320,
+    [theme.breakpoints.down(913)]: {
+      height: 292
+    },
+    [theme.breakpoints.down(913)]: {
+      height: 212
+    }
   },
   product: {
     height: '100%',
@@ -77,6 +118,26 @@ const templateStyles = theme => ({
     '& span': {
       color: '#ffffff',
       fontWeight: 700
+    },
+    [theme.breakpoints.down(1025)]: {
+      padding: '16px 42px !important',
+      minWidth: '192px !important',
+      height: '48px !important'
+    },
+    [theme.breakpoints.down(913)]: {
+      padding: '16px 16px !important',
+      minWidth: '164px !important',
+      height: '52px !important'
+    },
+    [theme.breakpoints.down(541)]: {
+      padding: '12px 12px !important',
+      minWidth: '142px !important',
+      height: '46px !important'
+    },
+    [theme.breakpoints.down(391)]: {
+      padding: '6px 8px !important',
+      minWidth: '124px !important',
+      height: '36px !important'
     }
   },
   shipSwagFormContainer: {
