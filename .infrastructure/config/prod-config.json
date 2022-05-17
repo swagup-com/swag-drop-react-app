@@ -1,0 +1,19 @@
+{
+  "REACT_APP_API_ENDPOINT": "https://api-staging.swagup.com/api/v1",
+  "REACT_APP_PUBLIC_API_ENDPOINT": "https://api-staging.swagup.com/public/api/v1",
+  "REACT_APP_API_FORM_ENDPOINT": "https://api-staging.swagup.com/form-api/v1",
+  "REACT_APP_OKTA_ISSUER": "https://signin-staging.swagup.com/oauth2/default",
+  "REACT_APP_OKTA_CLIENTID": "0oabvu0sjSyar0JYD356",
+  "REACT_APP_OKTA_REDIRECTURI": "/implicit/callback",
+  "REACT_APP_WORDPRESS_API_REST": "https://headless-cms.swagup.com",
+  "REACT_APP_CONTENTFUL_SPACE_ID": "ifqfwno34zj7",
+  "REACT_APP_CONTENTFUL_ACCESS_TOKEN": "53-iIYyJTEiRaSyENLvGFG1FnmQp-gSq3DUiK_YTZ-8",
+  "REACT_APP_LAUNCH_DARKLY_CLIENTID": "60bfc822ffefb50bacc71121",
+  "REACT_APP_API_PARTNERSHIPS_ENDPOINT": "https://api.swagup.com/partnerships-api/v1",
+  "REACT_APP_API_ENDPOINT_101": "https://api-staging.swagup.com/api/v1.01",
+  "REACT_APP_INTERCOM_APP_ID": "tb38j726",
+  "REACT_APP_GTM_PREVIEW": "env-184",
+  "REACT_APP_GTM_AUTH": "-nFTwu_w9F86CGuszickOw",
+  "REACT_APP_GTM_CONTAINER": "GTM-K64JJB8",
+  "REACT_APP_LOG_ROCKET_PROJECT_ID": "li6gxc/swaguphr-staging"
+}

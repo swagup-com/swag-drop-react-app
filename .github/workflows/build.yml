@@ -1,0 +1,69 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - "**"
+      - "!main"
+
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, closed]
+
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+  repository-projects: read
+  packages: read
+  actions: read
+
+jobs:
+  build:
+    if: (!(github.event.action == 'closed' && github.event.pull_request.merged != true))
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Set git user information
+        run: |
+          git config --global user.name "$(git --no-pager log --format=format:'%an' -n 1)"
+          git config --global user.email "$(git --no-pager log --format=format:'%ae' -n 1)"
+
+      - name: Setup NPM Auth
+        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_ACTION_BYPASS_TOKEN }}" | cat - .npmrc > temp && mv temp .npmrc
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Semantic version increment
+        run: npm run ci:release
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@master
+        with:
+          role-to-assume: arn:aws:iam::507973266491:role/sp-marketing-web-base
+          aws-region: us-east-2
+
+      - name: CI Build
+        if: (github.ref_name != 'main')
+        run: |
+          npm run ci:build                                                                                                      \
+          --version-suffix=$(echo ${{ github.event.inputs.ref || github.ref_name }} | sed -e "s/\//-/g")-${{ github.run_id }}   \
+          --artifact-bucket-uri=s3://swagup-spaceport-main-artifacts
+
+      - name: Release Build
+        if: (github.base_ref == 'main' && github.event.pull_request.merged == true)
+        run: npm run ci:build --artifact-bucket-uri=s3://swagup-spaceport-main-artifacts
+
+      - name: Commit build changes
+        if: (github.base_ref == 'main' && github.event.pull_request.merged == true)
+        run: git push --follow-tags https://${{ github.actor }}:${{ secrets.GH_ACTION_BYPASS_TOKEN }}@github.com/${{ github.repository }}.git ${{ github.base_ref }}

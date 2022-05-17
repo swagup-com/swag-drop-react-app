@@ -1,0 +1,60 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        type: choice
+        description: "Specify environment"
+        options:
+          - dev
+          - prod
+        required: true
+        default: "dev"
+      artifact-version:
+        description: "Specify artifact version"
+        required: true
+        default: "latest"
+
+permissions:
+  id-token: write
+  contents: read
+  repository-projects: read
+  packages: read
+  actions: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup NPM Auth
+        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.GH_ACTION_BYPASS_TOKEN }}" | cat - .npmrc > temp && mv temp .npmrc
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@master
+        with:
+          role-to-assume: arn:aws:iam::507973266491:role/sp-marketing-web-base
+          aws-region: us-east-2
+
+      - name: Deploy Artifact
+        run: |
+          npm run ci:deploy                                                                                   \
+          --environment="${{ github.event.inputs.environment }}"                                              \
+          --artifact-version="${{ github.event.inputs.artifact-version }}"                                    \
+          --target-artifact-bucket-uri="s3://${{ github.event.inputs.environment }}-swagup-marketing-website" \
+          --artifact-bucket-uri=s3://swagup-spaceport-main-artifacts                                          \
+          --aws-terraform-role=$([[ ${{ github.event.inputs.environment }} == "prod" ]]                       \
+              && echo "arn:aws:iam::950727922327:role/sp-marketing-web-terraform"                             \
+              || echo "arn:aws:iam::716384178101:role/sp-marketing-web-terraform")
+        shell: bash
