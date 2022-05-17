@@ -104,7 +104,7 @@ const RedeemTemplates = ({ redeem, onSwagDrop, handleONext, currentStep,
             <div className={classes.shipSwagFormContainer}>
               <form onSubmit={handleSubmit(onSwagDrop)}>
                 <Grid container justifyContent="center">
-                  <p className={classes.subtitle} style={{ fontSize: 28 }}>
+                  <p className={classes.formTitle}>
                     Fill out the following form and get your swag
                   </p>
                 </Grid>

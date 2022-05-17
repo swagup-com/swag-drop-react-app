@@ -42,7 +42,7 @@ const ContactForm = ({ justAddress, fixedCountry, noCompany, noTitle, hideSizes,
 
   return (
     <Grid container spacing={4}>
-      <Grid item xs={justAddress ? 6 : 12}>
+      <Grid item xs={12}>
         <SelectField
           name="shipping_country"
           error={errors.shipping_country?.message}
@@ -62,7 +62,7 @@ const ContactForm = ({ justAddress, fixedCountry, noCompany, noTitle, hideSizes,
       </Grid>
       {!justAddress && (
         <>
-          <Grid item xs={6}>
+          <Grid item sm={6} xs={12}>
             <TextField
               fullWidth
               placeholder="First name"
@@ -72,7 +72,7 @@ const ContactForm = ({ justAddress, fixedCountry, noCompany, noTitle, hideSizes,
               {...register('first_name', { deps: ['last_name'] })}
             />
           </Grid>
-          <Grid item xs={6}>
+          <Grid item sm={6} xs={12}>
             <TextField
               fullWidth
               placeholder="Last name"
@@ -82,16 +82,16 @@ const ContactForm = ({ justAddress, fixedCountry, noCompany, noTitle, hideSizes,
             />
           </Grid>
           {!noCompany && (
-            <Grid item  xs={6}>
+            <Grid item md={6} xs={12}>
               <TextField fullWidth placeholder="Company name" autoComplete="company" {...register('company')} />
             </Grid>
           )}
           {!noTitle && (
-            <Grid item xs={6}>
+            <Grid item sm={6} xs={12}>
               <TextField fullWidth placeholder="Title" autoComplete="title" {...register('title')} />
             </Grid>
           )}
-          <Grid item  xs={6}>
+          <Grid item sm={6} xs={12}>
             <TextField
               fullWidth
               placeholder="Email address"
@@ -102,7 +102,7 @@ const ContactForm = ({ justAddress, fixedCountry, noCompany, noTitle, hideSizes,
           </Grid>
         </>
       )}
-      <Grid item xs={6}>
+      <Grid item sm={6} xs={12}>
         <PhoneField
           name="phone_number"
           error={errors.phone_number?.message}
@@ -164,7 +164,7 @@ const ContactForm = ({ justAddress, fixedCountry, noCompany, noTitle, hideSizes,
           {...register('shipping_city')}
         />
       </Grid>
-      <Grid item  xs={6}>
+      <Grid item sm={6} xs={12}>
         {provinces.length === 0 ? (
           <TextField
             placeholder="State / Province / Region"
@@ -192,7 +192,7 @@ const ContactForm = ({ justAddress, fixedCountry, noCompany, noTitle, hideSizes,
           </SelectField>
         )}
       </Grid>
-      <Grid item xs={6}>
+      <Grid item sm={6} xs={12}>
         <TextField
           {...register('shipping_zip')}
           onInput={handleChangeZip}

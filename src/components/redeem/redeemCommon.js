@@ -91,6 +91,8 @@ const templateStyles = theme => ({
     ...standardMediaQueries(theme, 20, 24) }),
   advisory: props => ({ ...defaultText(props), fontSize: 14, marginTop: 32, marginBottom: 56,
     ...standardMediaQueries(theme, 14, 56) }),
+  formTitle: props => ({ ...defaultText(props), fontSize: 36, marginTop: 24, marginBottom: 32,
+    ...standardMediaQueries(theme, 28, 32) }),
   productContainer: {
     width: '100%',
     height: 320,
@@ -122,17 +124,17 @@ const templateStyles = theme => ({
     [theme.breakpoints.down(1025)]: {
       padding: '16px 42px !important',
       minWidth: '192px !important',
-      height: '48px !important'
+      //  height: '48px !important'
     },
     [theme.breakpoints.down(913)]: {
       padding: '16px 16px !important',
       minWidth: '164px !important',
-      height: '52px !important'
+      height: '64px !important'
     },
     [theme.breakpoints.down(541)]: {
       padding: '12px 12px !important',
       minWidth: '142px !important',
-      height: '46px !important'
+      height: '56px !important'
     },
     [theme.breakpoints.down(391)]: {
       padding: '6px 8px !important',
@@ -144,7 +146,17 @@ const templateStyles = theme => ({
     padding: '24px 142px',
     paddingBottom: 156,
     background: ({ background }) => background || 'transparent',
-    zIndex: 2
+    textAlign: 'left',
+    zIndex: 2,
+    [theme.breakpoints.down(913)]: {
+      padding: '24px 32px'
+    },
+    [theme.breakpoints.down(541)]: {
+      padding: '24px 16px'
+    },
+    [theme.breakpoints.down(391)]: {
+      padding: '24px 8px'
+    }
   },
   footer: {
     // width: '100vw',
