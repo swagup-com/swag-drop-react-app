@@ -56,6 +56,21 @@ const s3 = new S3({
   }
 });
 
+const lowerWithoutSpace = (text, divider = '-') => text.toLowerCase().replace(/ /g, divider);
+
+const imageSrcSet = (imagePath, imageName, extension) => {
+  const imgName = imageName
+    ? imagePath + lowerWithoutSpace(imageName)
+    : imagePath.substring(0, imagePath.lastIndexOf('/')) +
+      lowerWithoutSpace(imagePath.substring(imagePath.lastIndexOf('/'), imagePath.lastIndexOf('.')));
+
+  const extFromPath = imagePath.lastIndexOf('.') > 0 ? imagePath.substring(imagePath.lastIndexOf('.') + 1) : undefined;
+  const extFromName =
+    imageName && imageName.lastIndexOf('.') > 0 ? imageName.substring(imageName.lastIndexOf('.') + 1) : undefined;
+  const ext = extension || extFromName || extFromPath || 'png';
+  return `${imgName}.${ext} 1x, ${imgName}@2x.${ext} 2x, ${imgName}@3x.${ext} 3x`; // images can also be jpg: TODO
+};
+
 export {
   addBusinessDaysToDate,
   dateAfterBusinessDays,
@@ -66,5 +81,6 @@ export {
   joinFields,
   normalizeUSZip,
   okAndLog,
-  zipCodeText
+  zipCodeText,
+  imageSrcSet
 };

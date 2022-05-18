@@ -6,6 +6,9 @@ import { createTheme } from '@swagup-com/react-ds-components';
 import RedeemHome from './components/redeem/RedeemHome';
 import Home from './Home';
 import { CssBaseline } from '@mui/material';
+import RedeemPagesCreate from './components/redeem/RedeemPagesCreate';
+import RedeemPagesHome from './components/redeem/RedeemPagesHome';
+import HeaderWrapper from './components/shared/HeaderWrapper';
 
 const theme = createTheme();
 
@@ -25,6 +28,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />}/>
           <Route path="/swag-drop/:company/:page" element={<RedeemHome />} exact/>
+          <Route path="/swag-drop/redeems" element={<HeaderWrapper component={RedeemPagesHome} />} />
+          <Route path="/swag-drop/redeems/:page" element={<HeaderWrapper component={RedeemPagesCreate} />} exact/>
         </Routes>
         </BrowserRouter>
       </QueryClientProvider>

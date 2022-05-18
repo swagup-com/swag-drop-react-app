@@ -17,6 +17,12 @@ const useDefaultQuery = (queryKey, queryFn, options) => {
   return useQuery(queryKey, queryFn, { ...defaultOptions, ...options });
 };
 
+const useCompany = (options = {}) => {
+  const query = useDefaultQuery(apiPaths.accounts, () => globalApi.fetchAccount(), options);
+
+  return query;
+};
+
 const useCountries = (options = {}) => {
   return useDefaultQuery(apiPaths.countries, () => globalApi.fetchCountries(), options);
 };
@@ -35,4 +41,4 @@ const useGlobalQuery = enabled => {
   return { isLoading, queries };
 };
 
-export { useGlobalQuery, useCountries, useSizes};
+export { useGlobalQuery, useCompany, useCountries, useSizes};

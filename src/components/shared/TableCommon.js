@@ -1,10 +1,11 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import * as React from 'react';
-import { Fade, Menu } from '@mui/icons-material';
+import { Menu } from '@mui/icons-material';
 import MuiTableCell from '@mui/material/TableCell';
 import MuiTableRow from '@mui/material/TableRow';
 import MuiCheckBox from '@mui/material/Checkbox';
 import { withStyles } from '@mui/styles';
+import { Fade } from '@mui/material';
 
 export const TableRow = withStyles({
   root: {

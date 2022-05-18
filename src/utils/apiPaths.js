@@ -1,4 +1,5 @@
 const apiPaths = {
+  accounts: '/accounts/',
   accountProduct: id => `${apiPaths.accountProducts}${id}/`,
   accountProducts: '/account-products/',
   addresses: '/addresses/',

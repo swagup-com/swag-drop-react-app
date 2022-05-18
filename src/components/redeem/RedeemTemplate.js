@@ -7,7 +7,7 @@ import { FormProvider, useForm } from "react-hook-form";
 import SwipeableViews from "react-swipeable-views/lib/SwipeableViews";
 import { emailRegex, getSchema } from "../../utils/commonValidations";
 import ContactForm from "../support/ContactForm";
-import { getPagePath, PostMessage, useTempletesStyles } from "./redeemCommon";
+import { getPageLink, PostMessage, useTempletesStyles } from "./redeemCommon";
 import { Button } from '@swagup-com/react-ds-components';
 
 
@@ -71,7 +71,7 @@ const RedeemTemplates = ({ redeem, onSwagDrop, handleONext, currentStep,
     return (
       <Grid container direction="column" className={classes.root}>
         <Grid item className={classes.header}>
-            <a href={getPagePath(redeem)}>
+            <a href={getPageLink(redeem)}>
                 <div className={classes.logoContainer}>
                     <img src={logo} alt={name} className={classes.logo} />
                 </div>
