@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import clsx from 'clsx';
 import handleImg from './handleImgHelper';
 import { makeStyles } from '@mui/styles';
+import { productStatus } from '../../api/constants';
 
 const ImgWithHandler = ({ src, alt, width, height, ...props }) => (
   <Img src={handleImg(src, width, height)} alt={alt} width={width} height={height} {...props} />
@@ -33,4 +34,9 @@ const Img = ({ src, alt, width, height, className, style, fallbackSrc = '/images
   );
 };
 
-export { Img, ImgWithHandler };
+const productImageBasedOnStatus = (product, height, width) =>
+  product.status === productStatus.pendingMockup || product.status === productStatus.inProgress
+    ? '/images/proofs/inDesign.gif'
+    : handleImg(product.image, width, height);
+
+export { Img, ImgWithHandler, productImageBasedOnStatus };

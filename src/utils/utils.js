@@ -71,6 +71,39 @@ const imageSrcSet = (imagePath, imageName, extension) => {
   return `${imgName}.${ext} 1x, ${imgName}@2x.${ext} 2x, ${imgName}@3x.${ext} 3x`; // images can also be jpg: TODO
 };
 
+const getTaxes = () => 0;
+
+const moneyStr = (value, decimals = 2) =>
+  Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+    minimumFractionDigits: decimals
+  }).format(value ?? 0);
+
+  const getEmployeeShipAddress = (e, includeName) =>
+  joinFields(
+    [
+      includeName && joinFields([e.first_name, e.last_name], ' '),
+      joinFields([e.shipping_address1, e.shipping_address2], ' '),
+      e.shipping_city,
+      joinFields([e.shipping_state, e.shipping_zip], ' '),
+      e.shipping_country
+    ],
+    ', '
+  );
+
+  const getSortedBySize = products => products.slice().sort((a, b) => a.size.sort_order - b.size.sort_order);
+
+  const formatDate = date => `${date.getMonth() + 1}/${date.getDate()}`;
+
+  const getEstimatedDeliveryMsg = (shippingDate, minDeliveryTime, maxDeliveryTime, formatDateFn = formatDate) => {
+  const date = shippingDate || new Date();
+  const minDate = formatDateFn(addBusinessDaysToDate(date, minDeliveryTime));
+  return minDeliveryTime === maxDeliveryTime
+    ? `${minDate} `
+    : `${minDate} - ${formatDateFn(addBusinessDaysToDate(date, maxDeliveryTime))}`;
+};
+
 export {
   addBusinessDaysToDate,
   dateAfterBusinessDays,
@@ -78,6 +111,11 @@ export {
   getMatchAddress,
   contentAppJSON,
   s3,
+  getEstimatedDeliveryMsg,
+  moneyStr,
+  getTaxes,
+  getEmployeeShipAddress,
+  getSortedBySize,
   joinFields,
   normalizeUSZip,
   okAndLog,

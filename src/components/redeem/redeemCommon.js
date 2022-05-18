@@ -13,54 +13,7 @@ import { TableCell, TableRow } from '../shared/TableCommon';
 import { Link } from 'react-router-dom';
 import { Add, ChevronRight, Remove } from '@mui/icons-material';
 import ShipmentStatus from '../shared/ShipmentStatus';
-
-export function StylessButton({
-  id,
-  className,
-  children,
-  width = 'auto',
-  height = 'auto',
-  onClick,
-  onMouseEnter,
-  onMouseLeave,
-  onLoad
-}) {
-  return (
-    <button
-      type="button"
-      id={id}
-      onClick={onClick}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-      className={className}
-      onLoad={onLoad}
-      style={{
-        display: 'table',
-        cursor: 'pointer',
-        textAlign: 'center !important',
-        border: 'none',
-        width,
-        height,
-        backgroundColor: 'transparent',
-        color: '#3577d4',
-        textDecorationLine: 'none',
-        outline: 0,
-        padding: 0
-      }}
-    >
-      <div
-        style={{
-          verticalAlign: 'middle',
-          fontFamily: 'Roboto',
-          letterSpacing: 'normal',
-          textAlign: 'center'
-        }}
-      >
-        {children}
-      </div>
-    </button>
-  );
-  };
+import StylessButton from '../shared/buttons';
 
 const StatusChip = withStyles({
   root: ({ status }) => ({
@@ -327,7 +280,7 @@ const classes = useStyles(selected);
         </Grid>
         <Grid container justifyContent="flex-start">
           <Grid item xs>
-            <Button variant="text" component={Link} to={`/redeem-history/${page.id}`} className={classes.link} style={{ paddingLeft: 0, paddingRight: 0 }}>
+            <Button variant="text" component={Link} to={`/swag-drop/redeem-history/${page.id}`} className={classes.link} style={{ paddingLeft: 0, paddingRight: 0 }}>
               View SwagDrop Details
               <ChevronRight className={classes.linkIcon} />
             </Button>

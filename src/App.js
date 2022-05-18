@@ -9,6 +9,7 @@ import { CssBaseline } from '@mui/material';
 import RedeemPagesCreate from './components/redeem/RedeemPagesCreate';
 import RedeemPagesHome from './components/redeem/RedeemPagesHome';
 import HeaderWrapper from './components/shared/HeaderWrapper';
+import RedeemPageHistory from './components/redeem/RedeemPageHistory';
 
 const theme = createTheme();
 
@@ -30,6 +31,7 @@ function App() {
           <Route path="/swag-drop/:company/:page" element={<RedeemHome />} exact/>
           <Route path="/swag-drop/redeems" element={<HeaderWrapper component={RedeemPagesHome} />} />
           <Route path="/swag-drop/redeems/:page" element={<HeaderWrapper component={RedeemPagesCreate} />} exact/>
+          <Route path="/swag-drop/redeem-history/:page" element={<HeaderWrapper component={RedeemPageHistory} />} exact/>
         </Routes>
         </BrowserRouter>
       </QueryClientProvider>
