@@ -1,6 +1,0 @@
-terraform_execution_role    = "arn:aws:iam::716384178101:role/sp-marketing-web-terraform"
-spaceport_role_arn          = "arn:aws:iam::507973266491:role/sp-marketing-web-base"
-default_domain              = "marketing-web.dev.swagup.ninja"
-hosted_zone                 = "dev.swagup.ninja"  
-env_name                    = "dev"
-customer_portal_domain      = "staging.swagup.com"

@@ -1,4 +1,4 @@
 bucket         = "swagup-spaceport-main-tf-state"
-key            = "marketing-web/prod.tfstate"
+key            = "swagdrop-ui/int1.tfstate"
 region         = "us-east-2"
 dynamodb_table = "spaceport-main-tf-state-locking"

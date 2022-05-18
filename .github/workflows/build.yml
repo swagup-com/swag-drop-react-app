@@ -16,21 +16,17 @@ on:
 permissions:
   id-token: write
   contents: read
-  repository-projects: read
   packages: read
-  actions: read
 
 jobs:
   build:
     if: (!(github.event.action == 'closed' && github.event.pull_request.merged != true))
     runs-on: ubuntu-latest
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Check out code
         uses: actions/checkout@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GH_ACTION_BYPASS_TOKEN }}
           fetch-depth: 0
 
       - name: Set git user information
@@ -50,7 +46,7 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@master
         with:
-          role-to-assume: arn:aws:iam::507973266491:role/sp-marketing-web-base
+          role-to-assume: arn:aws:iam::507973266491:role/sp-swagdrop-ui-base
           aws-region: us-east-2
 
       - name: CI Build

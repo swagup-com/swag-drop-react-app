@@ -1,10 +1,10 @@
+variable "region" {
+    type = string
+    default = "us-east-2"
+}
 variable "terraform_execution_role" {
     type = string
     default = null
-}
-
-variable "spaceport_role_arn" {
-    type = string
 }
 
 variable "default_domain" {
@@ -19,6 +19,7 @@ variable "env_name" {
   type = string
 }
 
-variable "customer_portal_domain" {
+variable "service_name" {
   type = string
+  default = "swagdrop-ui"
 }
