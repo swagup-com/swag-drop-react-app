@@ -378,6 +378,7 @@ const RedeemPagesCreate = () => {
                                   control={
                                     <ColorInput
                                       value={page.theme[tv]}
+                                      className={classes.inputText}
                                       onChange={color =>
                                         setPage(p => ({ ...p, theme: { ...p.theme, [tv]: color, id: 99 } }))
                                       }
@@ -442,7 +443,7 @@ const RedeemPagesCreate = () => {
                           </FileUploadZone>
                         ) : (
                           <TextField
-                            className={tf.multiline ? classes.inputTextMultiline : classes.inputText}
+                            // className={tf.multiline ? classes.inputTextMultiline : classes.inputText}
                             placeholder={tf.placeholder}
                             size="small"
                             value={page[tf.name]}

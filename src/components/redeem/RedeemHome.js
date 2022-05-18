@@ -31,7 +31,7 @@ const RedeemHome = () => {
 
 
   const { company, page } = useParams();
-  const { data: redeem } = useQuery('redeems', () => solutiontriangle.getbyslug(`${company}-${page}`), {
+  const { data: redeem, isFetching } = useQuery('redeems', () => solutiontriangle.getbyslug(`${company}-${page}`), {
     initialData: { theme: {}, products: [] },
     enabled: !!(company && page)
   });
@@ -140,7 +140,7 @@ const RedeemHome = () => {
 
   const classes = useStyles(redeem.theme);
   const templatedClasses = useTempletesStyles(redeem.theme);
-  
+
   return (
     <div className={classes.container}>
       <CenteredGrid>
@@ -152,7 +152,7 @@ const RedeemHome = () => {
             handleONext={() => (window.location = '/')}
           />
         ) : (
-          <RedeemTemplates
+          !isFetching && <RedeemTemplates
             redeem={redeem}
             onSwagDrop={onSwagDrop}
             generalError={generalError}
@@ -161,14 +161,14 @@ const RedeemHome = () => {
             currentStep={currentStep}
             handleONext={handleONext}
           />
-        )}
+          )}
          <AddressConfirmation
             open={isModalOpen}
             onClose={handleClose}
             address={addressVerification}
             callbackAction={handleAddressConfirmed}
           />
-          {isLoading && <Loader />}
+          {(isLoading || isFetching) && <Loader absolute />}
       </CenteredGrid>
     </div>
   );

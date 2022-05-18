@@ -47,12 +47,10 @@ const RedeemTemplates = ({ redeem, onSwagDrop, handleONext, currentStep,
         product,
         button,
         company,
-        background,
-        color,
-        accent,
-        fontFamily
+        theme
       } = redeem;
 
+      const { background, color, accent, fontFamily } = theme;
       const formMethods = useForm({
         resolver,
         mode: 'all',

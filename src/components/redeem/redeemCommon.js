@@ -461,24 +461,25 @@ const SimpleTooltip = withStyles(() => ({
     margin: '0px 0px 2px 0px'
   }
 }))(Tooltip);
-const ColorInput = ({ value, onChange }) => {
+
+const ColorInput = ({ value, onChange, className }) => {
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
 
   const handleClick = () => {
     setDisplayColorPicker(prev => !prev);
   };
 
-  const handleClose = () => {
-    setDisplayColorPicker(false);
-  };
+  const handleClose = () => setDisplayColorPicker(false);
 
   return (
     <SimpleTooltip
       placement="top-start"
       open={displayColorPicker}
       title={
-        <ClickAwayListener onClickAway={handleClose}>
-          <ChromePicker color={value} onChange={color => onChange(color.hex)} />
+        <ClickAwayListener onClickAway={handleClose} disableReactTree>
+          <div>
+            <ChromePicker color={value}  onChange={color => onChange(color.hex)}/>
+          </div>
         </ClickAwayListener>
       }
     >
@@ -487,6 +488,7 @@ const ColorInput = ({ value, onChange }) => {
         value={value}
         onChange={({ target }) => onChange(target.value)}
         onClick={handleClick}
+        className={className}
         InputProps={{
           startAdornment: (
             <InputAdornment position="start">

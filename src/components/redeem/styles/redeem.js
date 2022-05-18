@@ -164,10 +164,11 @@ const styles = theme => ({
   //   height: '42px !important',
   //   padding: '8px 24px !important'
   // },
-  // inputText:  {
-  //   height: '42px !important',
-  //   padding: '8px 24px !important'
-  // },
+  inputText:  {
+    '& input': {
+      padding: '12px !important'
+    }
+  },
   dataTemplate: {
     marginRight: 16,
     borderRadius: 16,
