@@ -5,14 +5,16 @@ import CenteredGrid from "./CenteredGrid";
 const HeaderWrapper = ({ component }) => {
 const Content = component;
     return (
-        <div>
-            <CenteredGrid>
-                <Grid container style={{ height: 72 }}>
-                    <Grid item >
-                        <img src="/images/public/swagup-logo.png" alt="logo" style={{ objectFit: 'contain', height: '100%',  maxWidth: 224}}/>
+        <div style={{ height: '100vh' }}>
+            <div style={{ backgroundColor: 'white' }}>
+                <CenteredGrid>
+                    <Grid container style={{ height: 56 }}>
+                        <Grid item >
+                            <img src="/images/public/swagup-logo.png" alt="logo" style={{ objectFit: 'contain', height: '100%',  maxWidth: 224}}/>
+                        </Grid>
                     </Grid>
-                </Grid>
-            </CenteredGrid>
+                </CenteredGrid>
+            </div>
             <div style={{ height: 24 }} />
             <Content />
         </div>

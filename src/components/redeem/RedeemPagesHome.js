@@ -50,7 +50,7 @@ const RedeemPagesHome = () => {
           />
         </Grid>
         <Grid item>
-          <Button component={Link} to="/redeem-pages-create" style={{ minWidth: 180, height: 56 }}>
+          <Button component={Link} to="/swag-drop/redeems-create" style={{ minWidth: 180, height: 56 }}>
             Create a SwagDrop
           </Button>
         </Grid>

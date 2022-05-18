@@ -19,5 +19,5 @@ export default {
       status: response.status, // TODO: Remove after refactoring to use react query
       result: response.result, // TODO: Remove after refactoring to use react query
       results: patchNegativeStock(response.data.results)
-    }))
+    })).catch(() => ({ results: [] }))
 };

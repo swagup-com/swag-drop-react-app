@@ -10,6 +10,9 @@ const styles = theme => ({
     fontSize: 40,
     lineHeight: 1
   },
+  goBack: {
+   display: 'flex'
+  },
   card: {
     padding: '23px 27px',
     border: '1px solid #ebeef2',
@@ -137,8 +140,8 @@ const styles = theme => ({
     minWidth: 276
   },
   stepContainer: {
-    padding: '24px 0px',
-    maxHeight: 'calc(100vh - 422px)',
+    padding: '6px 0px',
+    maxHeight: 'calc(100vh - 292px)',
     overflowY: 'auto',
     ...scrollBar
   },
@@ -154,13 +157,22 @@ const styles = theme => ({
     padding: '32px 0px'
   },
   stepTitle: {
-    fontSize: 24,
+    fontSize: 16,
     lineHeight: 1
   },
+  // inputTextMultiline: {
+  //   height: '42px !important',
+  //   padding: '8px 24px !important'
+  // },
+  // inputText:  {
+  //   height: '42px !important',
+  //   padding: '8px 24px !important'
+  // },
   dataTemplate: {
     marginRight: 16,
     borderRadius: 16,
     padding: 12,
+    marginBottom: 16,
     cursor: 'pointer',
     border: ({ selected }) => `1px solid #${selected ? '3577d4' : 'ebeef2'}`,
     '&:hover': {

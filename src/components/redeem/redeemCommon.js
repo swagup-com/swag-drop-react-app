@@ -426,7 +426,7 @@ const useModalStyles = makeStyles({
     position: 'relative',
     padding: '32px 45px 36px 45px',
     borderRadius: 32,
-    width: 520,
+    width: '520px !important',
     backgroundColor: '#fafafa',
     outline: 'none',
     border: 'transparent'

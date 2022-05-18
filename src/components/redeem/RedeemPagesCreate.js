@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { Checkbox, CircularProgress, FormControlLabel, Grid, Switch, Tooltip } from '@mui/material';
-import { Button, TextField } from '@swagup-com/react-ds-components';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Checkbox, CircularProgress, FormControlLabel, Grid, Switch, TextField, Tooltip } from '@mui/material';
+import { Button } from '@swagup-com/react-ds-components';
 import SwipeableViews from 'react-swipeable-views';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
@@ -70,7 +70,7 @@ const FormContainer = ({ children, title, step }) => {
     <div>
       <p
         className={classes.designName}
-        style={{ marginTop: 8, color: '#787B80', fontSize: 14, marginBottom: 8 }}
+        style={{ marginTop: 8, color: '#787B80', fontSize: 12, marginBottom: 8 }}
       >{`Step ${step}/3`}</p>
       <p className={classes.stepTitle}>{title}</p>
       <div className={classes.stepContainer}>{children}</div>
@@ -89,7 +89,7 @@ const PresetTemplate = ({ selected, onSelect, name, subtext, image }) => {
           </div>
         </Grid>
         <Grid item xs>
-          <Grid container alignItems="center" xs style={{ paddingLeft: 32 }}>
+          <Grid container alignItems="center" style={{ paddingLeft: 32 }}>
             <Grid item>
               <p style={{ color: '#0B1829', fontFamily: 'Gilroy', fontSize: 20, fontWeight: 600, marginBottom: 4 }}>
                 {name}
@@ -173,11 +173,13 @@ const RedeemPagesCreate = () => {
   const { data } = useQuery('redeem-details', () => solutiontriangle.get(id), {
     enabled: !!id
   });
+
   useEffect(() => {
     if (data?.id) setPage(data);
   }, [data]);
 
-  const { data: company } = useCompany();
+  //const { data: company } = useCompany();
+  const company = useMemo(() => ({ id: 3719, name: 'Weathervane' }), []);
 
   useEffect(() => {
     document.getElementById('root').style.background = 'linear-gradient(90deg, rgba(255,255,255) 50%, #EBF1FB 50%)';
@@ -233,13 +235,13 @@ const RedeemPagesCreate = () => {
   const createRedeem = useMutation(params => (id ? solutiontriangle.update(params) : solutiontriangle.create(params)), {
     onSuccess: () => {
       queryClient.invalidateQueries(['redeem']);
-      return navigate('/redeem-pages');
+      return navigate('/swag-drop/redeems');
     }
   });
 
   const handleOnPrevious = () => {
     const futureStep = currentStep - 1;
-    if (futureStep === 0) navigate('/redeem-pages');
+    if (futureStep === 0) navigate('/swag-drop/redeems');
     else setCurrentStep(futureStep);
   };
 
@@ -290,7 +292,7 @@ const RedeemPagesCreate = () => {
     }
     if (currentStep === 3)
       return (
-        (!accountProducts?.results || !accountProducts.results.find(ap => page.products.some(p => p.id === ap.id))) &&
+        ((!accountProducts?.results || !accountProducts.results.find(ap => page.products.some(p => p.id === ap.id)))) && accountProducts?.results.length > 0 &&
         'You must select at least a product'
       );
     return false;
@@ -299,18 +301,18 @@ const RedeemPagesCreate = () => {
 
   return (
     <CenteredGrid className={classes.root}>
-      <Grid container className={classes.fullHeight}>
+      <Grid container>
         <Grid item xs style={{ paddingRight: 16 }}>
           <Grid container direction="column" className={classes.fullHeight}>
             <Grid item>
-              <p variant="h1" className={classes.title} style={{ height: 28 }}>
+              <p variant="h1" className={classes.title} style={{ fontSize: 28 }}>
                 {`${id ? 'Update' : 'Create a'} SwagDrop page`}
               </p>
             </Grid>
             <Grid item xs>
               <SwipeableViews axis="x" index={currentStep - 1} className={classes.swipeableViews} disabled>
                 <FormContainer title="Choose your template" step={currentStep}>
-                  <Grid container style={{ paddingTop: 12 }}>
+                  <Grid container style={{ paddingTop: 16 }}>
                     <Grid item xs={12}>
                       <PresetTemplate
                         page={page}
@@ -341,7 +343,7 @@ const RedeemPagesCreate = () => {
                         image="vector"
                       />
                     </Grid>
-                    <Grid item container xs={12} style={{ paddingTop: 0 }}>
+                    <Grid item container xs={12} style={{ paddingTop: 32 }}>
                       <Grid container>
                         <Grid item xs={3}>
                           <FormControlLabel
@@ -442,6 +444,7 @@ const RedeemPagesCreate = () => {
                           <TextField
                             className={tf.multiline ? classes.inputTextMultiline : classes.inputText}
                             placeholder={tf.placeholder}
+                            size="small"
                             value={page[tf.name]}
                             name={tf.name}
                             onChange={onChange}
@@ -451,26 +454,29 @@ const RedeemPagesCreate = () => {
                         )}
                       </Grid>
                     ))}
-                    <FormControlLabel
-                      className={classes.formControl}
-                      control={
-                        <Checkbox
-                          disableRipple
-                          disableFocusRipple
-                          disableTouchRipple
-                          className={classes.allCheckbox}
-                          checked={!!page.isInternational}
-                          onChange={({ target: { checked } }) => setPage({ ...page, isInternational: checked })}
-                          inputProps={{ 'aria-label': `Selection shortcut actions checkbox` }}
-                        />
-                      }
-                      label={<p className={classes.demoLabel}>Is Interational?</p>}
-                    />
+                    <Grid item>
+                      <FormControlLabel
+                        className={classes.formControl}
+                        style={{ margin: 0, marginTop: 24, marginLeft: 16 }}
+                        control={
+                          <Checkbox
+                            disableRipple
+                            disableFocusRipple
+                            disableTouchRipple
+                            className={classes.allCheckbox}
+                            checked={!!page.isInternational}
+                            onChange={({ target: { checked } }) => setPage({ ...page, isInternational: checked })}
+                            inputProps={{ 'aria-label': `Selection shortcut actions checkbox` }}
+                          />
+                        }
+                        label={<p className={classes.demoLabel}>Is Interational?</p>}
+                      />
+                    </Grid>
                   </Grid>
                 </FormContainer>
                 <FormContainer title="Select your products" step={currentStep}>
                   <CardsContainer className={classes.productCardsContainer}>
-                    {accountProducts?.results.map(ap => (
+                    {accountProducts?.results?.map(ap => (
                       <ProductCard
                         key={ap.id}
                         product={ap}
@@ -491,7 +497,7 @@ const RedeemPagesCreate = () => {
                   Previous step
                 </Button>
               </Grid>
-              <Grid xs />
+              <Grid xs item />
               <Grid item xs={3}>
                 <Tooltip title={errors()} disableHoverListener={!errors()}>
                   <div>
@@ -515,18 +521,7 @@ const RedeemPagesCreate = () => {
           <Grid container alignItems="center" style={{ paddingLeft: 32, height: '100%' }}>
             <Grid item>
               <TemplatePreview
-                name={page.name}
-                header={page.header}
-                subtitle={page.subtitle}
-                logo={page.logo || page.company.logo}
-                product={page.product || page.products[0].image}
-                button={page.button}
-                company={page.company.names}
-                background={page.theme.background}
-                color={page.theme.color}
-                accent={page.theme.accent}
-                fontFamily={page.theme.fontFamily}
-                isDarkTheme={page.theme.id === 1}
+                page={page}
               />
             </Grid>
           </Grid>

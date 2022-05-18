@@ -51,20 +51,19 @@ const defaultText = ({ color, fontFamily }) => ({
   });
   
   const useTempletesStyles = makeStyles(templateStyles);
-  const TemplatePreview = ({
-    name,
-    header,
-    subtitle,
-    logo,
-    product,
-    button,
-    company,
-    background,
-    color,
-    accent,
-    fontFamily,
-    isDarkTheme
-  }) => {
+  const TemplatePreview = ({  page }) => {
+    const { 
+        name,
+        header,
+        subtitle,
+        logo,
+        product,
+        button,
+        company,
+        theme
+      } = page;
+    const { fontFamily, background, color, accent } = theme;
+    const isDarkTheme = page.theme.id === 1;
     const classes = useTempletesStyles({ background, color, accent, fontFamily });
     return (
       <Grid container direction="column" className={classes.root}>

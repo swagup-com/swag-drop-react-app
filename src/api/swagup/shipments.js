@@ -27,4 +27,58 @@ const sendSwag = async (orders, maxPayloadSize) => {
   return results;
 };
 
-export default { sendSwag };
+let cancelTokenSource;
+
+export default { 
+  sendSwag,
+  async fetch({
+    offset = 0,
+    limit = 24,
+    search = '',
+    createdAt = 'all',
+    statusIn,
+    exportCSV,
+    isCancellable = true,
+    ...rest
+  }) {
+    if (cancelTokenSource) cancelTokenSource.cancel('Shipment request canceled due to new request');
+    const commonParams = {
+      search,
+      created_at: createdAt,
+      ordering: 'is_valid_address,-created_at',
+      ...rest
+    };
+    const params = statusIn
+      ? {
+          status__in: statusIn,
+          ...commonParams
+        }
+      : commonParams;
+    // If the order of the params changes or some param is added or deleted,
+    // then check the tests of the components that use this api call
+    const config = exportCSV
+      ? {
+          headers: { Accept: 'text/csv' },
+          params
+        }
+      : {
+          params: {
+            ...params,
+            offset,
+            limit
+          }
+        };
+
+    cancelTokenSource = isCancellable ? axios.CancelToken.source() : null;
+    const cancelToken = cancelTokenSource?.token;
+    try {
+
+      const result = await Dashboard.get(apiPaths.employeeOrders, { cancelToken, status200, ...config });
+      cancelTokenSource = null;
+      return result.data;
+    }
+    catch {
+      return [];
+    }
+  }
+ };

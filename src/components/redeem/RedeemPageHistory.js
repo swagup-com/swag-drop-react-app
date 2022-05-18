@@ -94,7 +94,7 @@ const RedeemPageHistory = () => {
     onSuccess: () => {
       queryClient.invalidateQueries(['redeem']);
       setDeleteModalOpen(false);
-      return navigate('/redeem-pages');
+      return navigate('/swag-drop/redeems');
     }
   });
 
@@ -106,7 +106,7 @@ const RedeemPageHistory = () => {
     <CenteredGrid className={classes.root} style={{ paddingTop: 0 }}>
       <Grid container justifyContent="space-between" alignItems="center" style={{ marginBottom: 20, marginTop: 12 }}>
         <Grid item xs={12}>
-          <Link to="/redeem-pages" className={classes.goBack}>
+          <Link to="/swag-drop/redeems" className={classes.goBack}>
             <ArrowBackIcon className={classes.goBackIcon} />
             Back to SwagDrop
           </Link>
@@ -126,7 +126,7 @@ const RedeemPageHistory = () => {
           </Button>
         </Grid>
         <Grid item>
-          <Button component={Link} to={`/redeem-details/${page.id}`} style={{ minWidth: 180, height: 56 }}>
+          <Button component={Link} to={`/swag-drop/redeems/${page.id}`} style={{ minWidth: 180, height: 56 }}>
             Edit Page
           </Button>
         </Grid>

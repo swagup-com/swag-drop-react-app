@@ -30,8 +30,9 @@ function App() {
           <Route path="/" element={<Home />}/>
           <Route path="/swag-drop/:company/:page" element={<RedeemHome />} exact/>
           <Route path="/swag-drop/redeems" element={<HeaderWrapper component={RedeemPagesHome} />} />
-          <Route path="/swag-drop/redeems/:page" element={<HeaderWrapper component={RedeemPagesCreate} />} exact/>
-          <Route path="/swag-drop/redeem-history/:page" element={<HeaderWrapper component={RedeemPageHistory} />} exact/>
+          <Route path="/swag-drop/redeems-create" element={<HeaderWrapper component={RedeemPagesCreate} />} exact/>
+          <Route path="/swag-drop/redeems/:id" element={<HeaderWrapper component={RedeemPagesCreate} />} exact/>
+          <Route path="/swag-drop/redeem-history/:id" element={<HeaderWrapper component={RedeemPageHistory} />} exact/>
         </Routes>
         </BrowserRouter>
       </QueryClientProvider>
