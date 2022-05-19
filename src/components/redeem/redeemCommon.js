@@ -233,8 +233,9 @@ const pageStatusStyles = {
   draft: { color: '#8d9299 !important', backgroundColor: '#ebeef2 !important' }
 };
 
+const getStatus = active => active ? 'published' : 'draft';
 const prepare = text => text.toLowerCase().replaceAll(' ', '-');
-const getPageLink = ({ company, name }) => company && name ? `/swag-drop/${prepare(company)}/${prepare(name)}` : '/';;
+const getPageLink = ({ company, name }) => company && name ? `/swag-drop/${prepare(company)}-${prepare(name)}` : '/';;
 
 const RedeemPageCard = ({ page, selected }) => {
 const classes = useStyles(selected);
@@ -244,7 +245,7 @@ const classes = useStyles(selected);
       <Grid container>
         <Grid item xs={12} container alignItems="center" className={classes.cardHeader}>
           <Grid item xs>
-            <StatusChip label={page.status} status={pageStatusStyles[page.status]} />
+            <StatusChip label={getStatus(page.isActive)} status={pageStatusStyles[getStatus(page.isActive)]} />
           </Grid>
           <Grid item>
             <a href={getPageLink(page)} target="_blank" className={classes.link} rel="noreferrer">
@@ -254,20 +255,20 @@ const classes = useStyles(selected);
         </Grid>
         <Grid item xs={12} container justifyContent="center">
           <Grid className={classes.imageContainer}>
-            <Img src={page.product || page.products[0].image} alt={page.name} className={classes.designImage} />
+            <Img src={page.clientImage} alt={page.projectName} className={classes.designImage} />
           </Grid>
         </Grid>
         <Grid item xs={12}>
           <Grid container alignItems="center" style={{ marginTop: 24 }}>
             <Grid item xs={12}>
               <p className={classes.designName} style={{ marginTop: 0 }}>
-                {page.name}
+                {page.projectName}
               </p>
             </Grid>
           </Grid>
           <Grid container alignItems="center">
             <Grid item xs>
-              <p className={classes.designPrice}>{page.isInternational ? 'International' : 'US Only'}</p>
+              <p className={classes.designPrice}>{page.allowInternationalShipping ? 'International' : 'US Only'}</p>
             </Grid>
             <Grid item>
               <Tooltip title="Last date modified" width={190} color="blue">
@@ -280,7 +281,7 @@ const classes = useStyles(selected);
         </Grid>
         <Grid container justifyContent="flex-start">
           <Grid item xs>
-            <Button variant="text" component={Link} to={`/swag-drop/redeem-history/${page.id}`} className={classes.link} style={{ paddingLeft: 0, paddingRight: 0 }}>
+            <Button variant="text" component={Link} to={`/swag-drop/redeem-history/${page.urlSlug}`} className={classes.link} style={{ paddingLeft: 0, paddingRight: 0 }}>
               View SwagDrop Details
               <ChevronRight className={classes.linkIcon} />
             </Button>
@@ -537,6 +538,7 @@ export {
   TableEmptyState,
   RedeemPageDeleteModal,
   ColorInput,
+  getStatus,
   useTempletesStyles
 };
 

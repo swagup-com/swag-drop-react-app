@@ -16,7 +16,6 @@ import { ShipmentRow, TableEmptyState, RedeemPageDeleteModal } from './redeemCom
 import { usePaginatedQuery } from '../../hooks';
 import apiPaths from '../../utils/apiPaths';
 import accountProductsApi from '../../api/swagup/accountProducts';
-import solutiontriangle from '../../api/solutiontriangle';
 import { shipmentsApi } from '../../api/swagup';
 import { TableCell, TableRow } from '../shared/TableCommon';
 import ProductsCarousel from './ProductsCarousel';
@@ -25,6 +24,7 @@ import Loader from '../shared/Loader';
 import CenteredGrid from '../shared/CenteredGrid';
 import Pagination from '../shared/Pagination';
 import { makeStyles } from '@mui/styles';
+import { redeemPages } from '../../api/swagdrop';
 
 
 export const statuses = {
@@ -47,13 +47,15 @@ const RedeemPageHistory = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { data } = useQuery('redeem-details', () => solutiontriangle.get(id), {
+  const { data } = useQuery('redeem-details', () => redeemPages.get(id), {
     enabled: !!id
   });
 
+  const result = data?.data;
+
   useEffect(() => {
-    if (data?.id) setPage(data);
-  }, [data]);
+    if (result?.id) setPage(result);
+  }, [result]);
 
   const redeemShipmentsParams = {
     source: `redeem-${page.id}`,
@@ -90,7 +92,7 @@ const RedeemPageHistory = () => {
   const accountProducts = accountProductsQueryResult?.results || [];
 
   const queryClient = useQueryClient();
-  const deleteRedeem = useMutation(i => solutiontriangle.delete(i), {
+  const deleteRedeem = useMutation(i => redeemPages.delete(i), {
     onSuccess: () => {
       queryClient.invalidateQueries(['redeem']);
       setDeleteModalOpen(false);
@@ -113,7 +115,7 @@ const RedeemPageHistory = () => {
         </Grid>
         <Grid item xs>
           <Typography variant="h1" style={{ fontSize: 40 }} className={classes.title}>
-            {page.name}
+            {page.projectName}
           </Typography>
         </Grid>
         <Grid item style={{ paddingRight: 32 }}>
@@ -126,7 +128,7 @@ const RedeemPageHistory = () => {
           </Button>
         </Grid>
         <Grid item>
-          <Button component={Link} to={`/swag-drop/redeems/${page.id}`} style={{ minWidth: 180, height: 56 }}>
+          <Button component={Link} to={`/swag-drop/redeems/${page.urlSlug}`} style={{ minWidth: 180, height: 56 }}>
             Edit Page
           </Button>
         </Grid>

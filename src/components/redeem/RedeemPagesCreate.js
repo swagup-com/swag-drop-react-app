@@ -10,7 +10,7 @@ import CheckCircle from '@mui/icons-material/RadioButtonUnchecked';
 import CheckRounded from '@mui/icons-material/RadioButtonChecked';
 import SortBy from '../shared/SortBy';
 import styles from './styles/redeem';
-import { ColorInput, FileUploadZone, prepare, prepareArtworksOnS3, ProductCard } from './redeemCommon';
+import { ColorInput, FileUploadZone, getStatus, prepare, prepareArtworksOnS3, ProductCard } from './redeemCommon';
 import { useCompany, usePaginatedQuery } from '../../hooks';
 import apiPaths from '../../utils/apiPaths';
 import accountProductsApi from '../../api/swagup/accountProducts';
@@ -19,49 +19,27 @@ import solutiontriangle from '../../api/solutiontriangle';
 import CenteredGrid from '../shared/CenteredGrid';
 import TemplatePreview from './TemplatePreview';
 import { makeStyles } from '@mui/styles';
+import { redeemPages } from '../../api/swagdrop';
 
 const useStyles = makeStyles(styles);
 
-const darkTheme = { id: 1, background: '#000000', color: '#ffffff', accent: '#45D2B0', fontFamily: 'Gilroy' };
-const lightTheme = { id: 2, background: '#FFFFFF', color: '#0b1829', accent: '#9846DD', fontFamily: 'Futura' };
+const darkTheme = { theme: 'dark', backgroundColor: '#000000', fontColor: '#ffffff', accentColor: '#45D2B0', fontFamily: 'Gilroy' };
+const lightTheme = { theme: 'light', backgroundColor: '#FFFFFF', fontColor: '#0b1829', accentColor: '#9846DD', fontFamily: 'Futura' };
 const dataTemplate = {
-  id: 1,
+  accountId: '3174',
   name: 'New SwagDrop Page',
-  company: {
-    id: 3719,
-    name: 'WildWest',
-    logo:
-      'https://images.squarespace-cdn.com/content/v1/583863c1e6f2e1216884123c/1501780550627-8WL59H2VU6ODTI4E00J7/image-asset.png?format=1000w'
-  },
-  status: 'draft',
-  products: [
-    {
-      id: 23,
-      name: 'Some Product',
-      image:
-        'https://swagup-static.swagup.com/platform/media/form/packs/SwagUp_-_Fulfillment_Internal_Test_--_Pack_The_Sample__3.png',
-      sizes: [
-        { id: 1, name: 'Small', value: 'S', quantity: 3 },
-        { id: 1, name: 'Meduim', value: 'M', quantity: 12 }
-      ]
-    },
-    {
-      id: 45,
-      name: 'Some Other Product',
-      image:
-        'https://swagup-static.swagup.com/platform/media/form/packs/SwagUp_-_Fulfillment_Internal_Test_--_Pack_Executive_.png',
-      sizes: [
-        { id: 1, name: 'Large', value: 'L', quantity: 50 },
-        { id: 1, name: 'Extra Large', value: 'XL', quantity: 23 }
-      ]
-    }
-  ],
+  isActive: true,
+  products: [],
   isInternational: false,
-  header: 'Welcome to CompanyName',
-  subtitle: 'We like to welcome you to our company with some small gifts. Click the button below to redeem it.',
-  button: 'Redeem Here',
+  headline: 'Welcome to CompanyName',
+  body: 'We like to welcome you to our company with some small gifts. Click the button below to redeem it.',
+  callToActionButtonText: 'Redeem Here',
   last_modified: '01-24-22',
-  theme: darkTheme
+  theme: 'dark',
+  backgroundColor: '#000000',
+  fontColor: '#ffffff',
+  accentColor: '#45D2B0',
+  fontFamily: 'Gilroy'
 };
 
 const FormContainer = ({ children, title, step }) => {
@@ -114,38 +92,38 @@ const PresetTemplate = ({ selected, onSelect, name, subtext, image }) => {
 
 const templateFields = [
   {
-    name: 'name',
+    name: 'projectName',
     placeholder: 'Name your Redeem Page',
     label: 'Name',
     required: true
   },
   {
-    name: 'header',
+    name: 'headline',
     placeholder: 'Edit your Redeem Page Header',
     label: 'Header',
     required: true
   },
   {
-    name: 'subtitle',
+    name: 'body',
     placeholder: 'Edit your Redeem Page Subtitle',
     label: 'Page Subtitle',
     multiline: true,
     required: true
   },
   {
-    name: 'button',
+    name: 'callToActionButtonText',
     placeholder: 'Edit your Call to action Text',
     label: 'Button Text',
     required: true
   },
   {
-    name: 'logo',
+    name: 'clientLogo',
     placeholder: 'Change the Page Logo',
     label: 'Logo',
     image: true
   },
   {
-    name: 'product',
+    name: 'clientImage',
     placeholder: 'Change the Product Image',
     label: 'Product Image',
     image: true
@@ -160,7 +138,7 @@ const fontFamilies = [
   { value: 'Futura', label: 'Futura' }
 ];
 
-const themeVars = ['background', 'color', 'accent'];
+const themeVars = ['backgroundColor', 'fontColor', 'accentColor'];
 
 const RedeemPagesCreate = () => {
   const [page, setPage] = useState(dataTemplate);
@@ -170,13 +148,13 @@ const RedeemPagesCreate = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { data } = useQuery('redeem-details', () => solutiontriangle.get(id), {
+  const { data } = useQuery('redeem-details', () => redeemPages.get(id), {
     enabled: !!id
   });
-
+  const result = data?.data;
   useEffect(() => {
-    if (data?.id) setPage(data);
-  }, [data]);
+    if (result?.id) setPage(result);
+  }, [result]);
 
   //const { data: company } = useCompany();
   const company = useMemo(() => ({ id: 3719, name: 'Weathervane' }), []);
@@ -208,24 +186,24 @@ const RedeemPagesCreate = () => {
   const accountProducts = queryResult.data;
 
   const createPayloadPage = () => {
-    const productsMap = page.products.filter(ap => accountProducts.results.some(p => p.id === ap.id));
-    const products = JSON.stringify(productsMap);
-    const theme = JSON.stringify(page.theme);
+    // const productsMap = page.products.filter(ap => accountProducts.results.some(p => p.id === ap.id));
+    // const products = JSON.stringify(productsMap);
+    // const theme = JSON.stringify(page.theme);
     const returnPage = {
       ...page,
-      products,
-      slug: prepare(`${page.company.name || page.company}-${page.name}`),
-      theme,
-      product: page.product || page.products[0].image,
-      isInternational: page.isInternational ? 1 : 0,
-      logo:
-        page.logo ||
-        page.company.logo ||
-        (page.theme.id === 1
-          ? 'https://images.squarespace-cdn.com/content/v1/583863c1e6f2e1216884123c/1501780578502-9VLVVYAWB2JLO86NWA0U/image-asset.jpeg?format=1000w'
-          : 'https://images.squarespace-cdn.com/content/v1/583863c1e6f2e1216884123c/1501780550627-8WL59H2VU6ODTI4E00J7/image-asset.png?format=1000w'),
-      company: page.company.name,
-      company_id: page.company.id,
+      // products,
+      // slug: prepare(`${page.company.name || page.company}-${page.name}`),
+      // theme,
+      // product: page.product || page.products[0].image,
+      // isInternational: page.isInternational ? 1 : 0,
+      // logo:
+        // page.logo ||
+        // page.company.logo ||
+        // (page.theme.id === 1
+        //   ? 'https://images.squarespace-cdn.com/content/v1/583863c1e6f2e1216884123c/1501780578502-9VLVVYAWB2JLO86NWA0U/image-asset.jpeg?format=1000w'
+        //   : 'https://images.squarespace-cdn.com/content/v1/583863c1e6f2e1216884123c/1501780550627-8WL59H2VU6ODTI4E00J7/image-asset.png?format=1000w'),
+      // company: page.company.name,
+      // company_id: page.company.id,
       last_modified: dayjs().format('MM-DD-YY')
     };
 
@@ -251,7 +229,7 @@ const RedeemPagesCreate = () => {
       createRedeem.mutate(createPayloadPage(page));
     } else setCurrentStep(futureStep);
   };
-  const isThemeSelected = i => page.theme.id === i;
+  const isThemeSelected = t => ['fontFamily', ...themeVars].every(key => page[key] === t[key]);
 
   const onChange = ({ target: { value, name } }) => setPage({ ...page, [name]: value });
 
@@ -316,8 +294,8 @@ const RedeemPagesCreate = () => {
                     <Grid item xs={12}>
                       <PresetTemplate
                         page={page}
-                        onSelect={() => setPage({ ...page, theme: darkTheme })}
-                        selected={isThemeSelected(darkTheme.id)}
+                        onSelect={() => setPage({ ...page, ...darkTheme })}
+                        selected={isThemeSelected(darkTheme)}
                         name="Dark Theme"
                         subtext="A cool dark looking view"
                         image="path2510"
@@ -326,8 +304,8 @@ const RedeemPagesCreate = () => {
                     <Grid item xs={12}>
                       <PresetTemplate
                         page={page}
-                        onSelect={() => setPage({ ...page, theme: lightTheme })}
-                        selected={isThemeSelected(lightTheme.id)}
+                        onSelect={() => setPage({ ...page, ...lightTheme })}
+                        selected={isThemeSelected(lightTheme)}
                         name="Light Theme"
                         subtext="A cool light looking view"
                         image="path2536"
@@ -336,8 +314,8 @@ const RedeemPagesCreate = () => {
                     <Grid item xs={12}>
                       <PresetTemplate
                         page={page}
-                        onSelect={() => setPage(p => ({ ...p, theme: { ...p.theme, id: 99 } }))}
-                        selected={isThemeSelected(99)}
+                        onSelect={() => setPage(p => ({ ...p, theme: 'custom' }))}
+                        selected={!isThemeSelected(darkTheme) && !isThemeSelected(lightTheme)}
                         name="Custom Theme"
                         subtext="Customize it yourself"
                         image="vector"
@@ -354,9 +332,9 @@ const RedeemPagesCreate = () => {
                               <SortBy
                                 versatil
                                 options={fontFamilies}
-                                selected={page.theme.fontFamily}
+                                selected={page.fontFamily}
                                 onChange={value =>
-                                  setPage(p => ({ ...p, theme: { ...p.theme, fontFamily: value, id: 99 } }))
+                                  setPage(p => ({ ...p, fontFamily : value }))
                                 }
                               />
                             }
@@ -377,10 +355,10 @@ const RedeemPagesCreate = () => {
                                   labelPlacement="top"
                                   control={
                                     <ColorInput
-                                      value={page.theme[tv]}
+                                      value={page[tv]}
                                       className={classes.inputText}
                                       onChange={color =>
-                                        setPage(p => ({ ...p, theme: { ...p.theme, [tv]: color, id: 99 } }))
+                                        setPage(p => ({ ...p, [tv]: color }))
                                       }
                                     />
                                   }
@@ -402,14 +380,14 @@ const RedeemPagesCreate = () => {
                   <Grid container>
                     <Grid container justifyContent="flex-end">
                       <FormControlLabel
-                        label={`Status: ${page.status}`}
+                        label={`Status: ${getStatus(page.status)}`}
                         style={{ width: 150 }}
                         labelPlacement="top"
                         control={
                           <Switch
-                            checked={page.status === 'published'}
+                            checked={page.isActive}
                             onChange={({ target: { checked } }) =>
-                              setPage(p => ({ ...p, status: checked ? 'published' : 'draft' }))
+                              setPage(p => ({ ...p, isActive: checked }))
                             }
                           />
                         }
@@ -465,8 +443,8 @@ const RedeemPagesCreate = () => {
                             disableFocusRipple
                             disableTouchRipple
                             className={classes.allCheckbox}
-                            checked={!!page.isInternational}
-                            onChange={({ target: { checked } }) => setPage({ ...page, isInternational: checked })}
+                            checked={!!page.allowInternationalShipping}
+                            onChange={({ target: { checked } }) => setPage({ ...page, allowInternationalShipping: checked })}
                             inputProps={{ 'aria-label': `Selection shortcut actions checkbox` }}
                           />
                         }

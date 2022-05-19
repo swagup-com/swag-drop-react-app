@@ -1,4 +1,5 @@
-import { S3 } from '@aws-sdk/client-s3';
+
+import S3 from 'aws-sdk/clients/s3';
 import { dayjs } from './dayjs';
 import log from './logger';
 

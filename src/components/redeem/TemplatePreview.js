@@ -4,15 +4,15 @@ import { makeStyles } from '@mui/styles';
 
 
 
-const defaultText = ({ color, fontFamily }) => ({
+const defaultText = ({ fontColor, fontFamily }) => ({
     fontFamily: fontFamily || 'Gilroy-SemiBold',
-    color: color || '#0b1829'
+    color: fontColor || '#0b1829'
   });
   const templateStyles = () => ({
     root: {
       height: 'auto',
       position: 'relative',
-      background: ({ background }) => background || 'transparent',
+      background: ({ backgroundColor }) => backgroundColor || 'transparent',
       padding: '0px 5%'
     },
     header: {
@@ -43,7 +43,7 @@ const defaultText = ({ color, fontFamily }) => ({
     button: {
       padding: '6px 12px',
       fontSize: 6,
-      background: ({ accent }) => accent || '#3577d4',
+      background: ({ accentColor }) => accentColor || '#3577d4',
       color: '#ffffff',
       borderRadius: 16,
       height: 'auto'
@@ -53,18 +53,22 @@ const defaultText = ({ color, fontFamily }) => ({
   const useTempletesStyles = makeStyles(templateStyles);
   const TemplatePreview = ({  page }) => {
     const { 
-        name,
-        header,
-        subtitle,
-        logo,
+        projectName,
+        headline,
+        body,
+        clientLogo,
         product,
-        button,
+        callToActionButtonText,
         company,
+        fontFamily,
+        backgroundColor,
+        fontColor,
+        accentColor,
         theme
       } = page;
-    const { fontFamily, background, color, accent } = theme;
-    const isDarkTheme = page.theme.id === 1;
-    const classes = useTempletesStyles({ background, color, accent, fontFamily });
+      
+    const isDarkTheme = theme === 'dark';
+    const classes = useTempletesStyles({ backgroundColor, fontColor, accentColor, fontFamily });
     return (
         <div>
             <Grid container direction="column" className={classes.root} style={{ marginLeft: 'auto', marginRight: 'auto' }}>
@@ -72,12 +76,12 @@ const defaultText = ({ color, fontFamily }) => ({
                 <div className={classes.logoContainer}>
                     <img
                     src={
-                        logo ||
+                        clientLogo ||
                         (isDarkTheme
                         ? 'https://images.squarespace-cdn.com/content/v1/583863c1e6f2e1216884123c/1501780578502-9VLVVYAWB2JLO86NWA0U/image-asset.jpeg?format=1000w'
                         : 'https://images.squarespace-cdn.com/content/v1/583863c1e6f2e1216884123c/1501780550627-8WL59H2VU6ODTI4E00J7/image-asset.png?format=1000w')
                     }
-                    alt={name}
+                    alt={projectName}
                     className={classes.logo}
                     />
                 </div>
@@ -87,10 +91,10 @@ const defaultText = ({ color, fontFamily }) => ({
                     <Grid item xs={6}>
                     <Grid container alignItems="center" style={{ height: '100%' }}>
                         <Grid item>
-                        <p className={classes.headerText}>{header}</p>
-                        <p className={classes.subtitle}>{subtitle}</p>
+                        <p className={classes.headerText}>{headline}</p>
+                        <p className={classes.subtitle}>{body}</p>
                         <a href="" className={classes.button}>
-                            {button}
+                            {callToActionButtonText}
                         </a>
                         <p className={classes.advisory}>
                             Please include your current address to ensure an accurate delivery at this time. Please be aware, due
@@ -102,7 +106,7 @@ const defaultText = ({ color, fontFamily }) => ({
                     <Grid item xs={6}>
                     <Grid container alignContent="center" style={{ height: '100%' }}>
                         <div className={classes.productContainer}>
-                        <img src={product} alt={name} className={classes.product} />
+                        <img src={product} alt={projectName} className={classes.product} />
                         </div>
                     </Grid>
                     </Grid>

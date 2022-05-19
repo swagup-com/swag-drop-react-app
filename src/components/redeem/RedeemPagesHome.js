@@ -10,9 +10,9 @@ import { CardsContainer } from '../shared/containers/Cards';
 import { RedeemPageCard } from './redeemCommon';
 import { OutlinedSearchField } from '../shared/Filters';
 import { usePaginatedQuery, usePerPageOptions } from '../../hooks';
-import solutiontriangle from '../../api/solutiontriangle';
 import Loader from '../shared/Loader';
 import { makeStyles } from '@mui/styles';
+import { redeemPages } from '../../api/swagdrop';
 
 const useStyles = makeStyles(styles);
 const RedeemPagesHome = () => {
@@ -22,12 +22,13 @@ const RedeemPagesHome = () => {
 
   const { query: queryResult, pagination } = usePaginatedQuery({
     queryKey: ['redeem', company.id],
-    queryFn: (limit, offset) => solutiontriangle.list({ limit, offset, company_id: company.id }),
+    queryFn: (limit, offset) => redeemPages.list({ limit, offset, company_id: company.id }),
     perPageOptions,
     enabled: !!company.id
   });
 
   const { data, isFetching } = queryResult;
+  const pages = data?.data || [];
   return (
     <CenteredGrid className={classes.root}>
       <Grid container justifyContent="space-between" alignItems="center">
@@ -57,7 +58,7 @@ const RedeemPagesHome = () => {
       </Grid>
       <Grid style={{ paddingTop: 32, paddingBottom: 56 }}>
         {isFetching && <Loader absolute />}
-        {!data || data.length === 0 ? (
+        {pages.length === 0 ? (
           <EmptyState
             title="It’s pretty quiet in here. Why not launch a SwagDrop?"
             image={{
@@ -69,7 +70,7 @@ const RedeemPagesHome = () => {
           />
         ) : (
           <CardsContainer className={classes.cardsContainer}>
-            {data.map(page => (
+            {pages.map(page => (
               <RedeemPageCard key={page.id} page={page} />
             ))}
           </CardsContainer>
