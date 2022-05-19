@@ -10,7 +10,7 @@ import CheckCircle from '@mui/icons-material/RadioButtonUnchecked';
 import CheckRounded from '@mui/icons-material/RadioButtonChecked';
 import SortBy from '../shared/SortBy';
 import styles from './styles/redeem';
-import { ColorInput, FileUploadZone, getStatus, prepare, prepareArtworksOnS3, ProductCard } from './redeemCommon';
+import { ColorInput, FileUploadZone, getStatus, prepare, prepareArtworkOnUploadIO, prepareArtworksOnS3, ProductCard } from './redeemCommon';
 import { useCompany, usePaginatedQuery } from '../../hooks';
 import apiPaths from '../../utils/apiPaths';
 import accountProductsApi from '../../api/swagup/accountProducts';
@@ -259,7 +259,7 @@ const RedeemPagesCreate = () => {
     setArtworkLoader(al => [...al, property]);
     const image = acceptedFiles[0];
     // const filePath = URL.createObjectURL(image);
-    const uploaded = await prepareArtworksOnS3(image);
+    const uploaded = await prepareArtworkOnUploadIO(image);
     setPage(p => ({ ...p, [property]: uploaded.url }));
     setArtworkLoader(al => al.filter(a => a !== property));
   };

@@ -115,7 +115,7 @@ const defaultText = ({ fontColor, fontFamily }) => ({
                 </Grid>
                 <Grid item>
                 <Grid container justifyContent="center">
-                    <p className={classes.advisory}>{`© ${new Date().getFullYear()} by ${company} in Partnership with SwagUp`}</p>
+                    <p className={classes.advisory}>{`© ${new Date().getFullYear()} by ${'Weathenave'} in Partnership with SwagUp`}</p>
                 </Grid>
                 </Grid>
             </Grid>

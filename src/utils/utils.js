@@ -1,5 +1,6 @@
 import AWS from 'aws-sdk/global';
 import S3 from 'aws-sdk/clients/s3';
+import { Upload } from 'upload-js';
 import { dayjs } from './dayjs';
 import log from './logger';
 
@@ -50,6 +51,18 @@ const getMatchAddress = (address, recipient) => {
       return true;
   }
 };
+
+const upload = new Upload({
+  apiKey: "free"
+});
+
+const uploadFile = async file => {
+
+  const response = await upload.uploadFile({
+    file
+  });
+  return response;
+}
 
 AWS.config.update({
   region: process.env.REACT_APP_AWS_REGION,
@@ -149,6 +162,7 @@ function adjustColor(color, amount) {
 
 export {
   pSBC,
+  uploadFile,
   adjustColor,
   addBusinessDaysToDate,
   dateAfterBusinessDays,

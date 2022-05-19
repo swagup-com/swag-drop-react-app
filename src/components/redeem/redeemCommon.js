@@ -8,7 +8,7 @@ import { useDropzone } from 'react-dropzone';
 import styles from './styles/redeem';
 import { StandardCard } from '../shared/containers/Cards';
 import CircularCheckbox from '../shared/CircularCheckbox';
-import { adjustColor, pSBC, s3 } from '../../utils/utils';
+import { adjustColor, pSBC, s3, uploadFile } from '../../utils/utils';
 import { TableCell, TableRow } from '../shared/TableCommon';
 import { Link } from 'react-router-dom';
 import { Add, ChevronRight, Remove } from '@mui/icons-material';
@@ -515,6 +515,10 @@ const FileUploadZone = ({ handleFileUpload, children, disabled, renderComponent 
   );
 };
 
+const prepareArtworkOnUploadIO = async artwork => {
+  const uploadIOData = await uploadFile(artwork);
+  return { name: uploadIOData.fileId, url: uploadIOData.fileUrl };
+}
 const prepareArtworksOnS3 = async artwork => {
   const s3Data = await s3
     .upload({
@@ -533,6 +537,7 @@ export {
   prepare,
   PostMessage,
   prepareArtworksOnS3,
+  prepareArtworkOnUploadIO,
   FileUploadZone,
   ShipmentRow,
   TableEmptyState,
