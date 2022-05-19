@@ -17,4 +17,6 @@ export default {
 
   get: slug => axios.get(swagDropServicesApiPaths.redeemPage(slug), { status200 }).then(rslt => rslt).catch(() => []),
 
+  create: params => axios.post(swagDropServicesApiPaths.redeemPages, params, status200or201),
+
 };

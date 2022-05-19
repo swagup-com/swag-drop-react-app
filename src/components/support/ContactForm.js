@@ -21,7 +21,7 @@ const ContactForm = ({ justAddress, fixedCountry, noCompany, noTitle, hideSizes,
   const { data: sizesAPI } = useSizes({ select: data => data.filter(s => s.category === 'Apparel') });
   const sizes = sizesAPI || [];
 
-  const isInternational = country !== 'US';
+  const allowInternationalShipping = country !== 'US';
   const provinces = countries?.find(c => c.iso2 === country)?.provinces ?? [];
 
   useEffect(() => {
@@ -34,7 +34,7 @@ const ContactForm = ({ justAddress, fixedCountry, noCompany, noTitle, hideSizes,
   }, [country, errors, getValues, trigger]);
 
   const handleChangeZip = e => {
-    if (!isInternational) {
+    if (!allowInternationalShipping) {
       const value = normalizeUSZip(e?.target?.value ?? '');
       setValue('shipping_zip', value);
     }
@@ -197,7 +197,7 @@ const ContactForm = ({ justAddress, fixedCountry, noCompany, noTitle, hideSizes,
           {...register('shipping_zip')}
           onInput={handleChangeZip}
           error={errors.shipping_zip?.message}
-          placeholder={zipCodeText(isInternational)}
+          placeholder={zipCodeText(allowInternationalShipping)}
           autoComplete="shipping_zip"
           fullWidth
         />

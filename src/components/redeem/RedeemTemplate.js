@@ -54,7 +54,7 @@ const RedeemTemplates = ({ redeem, onSwagDrop, handleONext, currentStep,
       const formMethods = useForm({
         resolver,
         mode: 'all',
-        defaultValues: { shipping_country: redeem.isInternational ? undefined : 'US' }
+        defaultValues: { shipping_country: redeem.allowInternationalShipping ? undefined : 'US' }
       });
     
     const { formState, handleSubmit, setError } = formMethods;
@@ -109,7 +109,7 @@ const RedeemTemplates = ({ redeem, onSwagDrop, handleONext, currentStep,
                 {currentStep === 2 && (
                   <FormProvider {...formMethods}>
                     <ContactForm
-                      fixedCountry={!redeem.isInternational}
+                      fixedCountry={!redeem.allowInternationalShipping}
                       noCompany
                       noTitle
                       hideSizes={!redeem.products.some(p => p.is_apparel)}

@@ -15,7 +15,7 @@ const convert = d => ({
   id: parseInt(d.id, 10),
   products: JSON.parse(d.products),
   theme: JSON.parse(d.theme),
-  isInternational: parseInt(d.isInternational, 10)
+  allowInternationalShipping: parseInt(d.allowInternationalShipping, 10)
 });
 const convertToObject = data => data.map(d => convert(d));
 

@@ -1,4 +1,4 @@
-
+import AWS from 'aws-sdk/global';
 import S3 from 'aws-sdk/clients/s3';
 import { dayjs } from './dayjs';
 import log from './logger';
@@ -23,7 +23,7 @@ const normalizeUSZip = value => {
   return `${onlyNums.slice(0, 5)}-${onlyNums.slice(5, 9)}`;
 };
 
-const zipCodeText = isInternational => (isInternational ? 'Postal Code' : 'Zip code');
+const zipCodeText = allowInternationalShipping => (allowInternationalShipping ? 'Postal Code' : 'Zip code');
 
 
 const contentAppJSON = { 'Content-Type': 'application/json' };
@@ -51,9 +51,16 @@ const getMatchAddress = (address, recipient) => {
   }
 };
 
+AWS.config.update({
+  region: process.env.REACT_APP_AWS_REGION,
+  credentials: new AWS.CognitoIdentityCredentials({
+    IdentityPoolId: process.env.REACT_APP_IDENTITY_POOL_ID
+  })
+});
 const s3 = new S3({
   params: {
-    Bucket: process.env.REACT_APP_AWS_UPLOAD_RESOURCES_BUCKET
+    Bucket: process.env.REACT_APP_AWS_UPLOAD_RESOURCES_BUCKET,
+    IdentityPoolId: process.env.REACT_APP_IDENTITY_POOL_ID
   }
 });
 

@@ -36,6 +36,7 @@ const defaultText = ({ fontColor, fontFamily }) => ({
       height: '40%'
     },
     product: {
+      minHeight: 124,
       height: '100%',
       width: '100%',
       objectFit: 'scale-down'
@@ -57,7 +58,7 @@ const defaultText = ({ fontColor, fontFamily }) => ({
         headline,
         body,
         clientLogo,
-        product,
+        clientImage,
         callToActionButtonText,
         company,
         fontFamily,
@@ -106,7 +107,7 @@ const defaultText = ({ fontColor, fontFamily }) => ({
                     <Grid item xs={6}>
                     <Grid container alignContent="center" style={{ height: '100%' }}>
                         <div className={classes.productContainer}>
-                        <img src={product} alt={projectName} className={classes.product} />
+                        <img src={clientImage} alt={projectName} className={classes.product} />
                         </div>
                     </Grid>
                     </Grid>

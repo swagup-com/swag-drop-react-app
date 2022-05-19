@@ -27,10 +27,12 @@ const darkTheme = { theme: 'dark', backgroundColor: '#000000', fontColor: '#ffff
 const lightTheme = { theme: 'light', backgroundColor: '#FFFFFF', fontColor: '#0b1829', accentColor: '#9846DD', fontFamily: 'Futura' };
 const dataTemplate = {
   accountId: '3174',
-  name: 'New SwagDrop Page',
+  projectName: 'New SwagDrop Page',
   isActive: true,
   products: [],
-  isInternational: false,
+  clientLogo: 'https://images.squarespace-cdn.com/content/v1/583863c1e6f2e1216884123c/1501780578502-9VLVVYAWB2JLO86NWA0U/image-asset.jpeg?format=1000w',
+  clientImage: 'https://swagup-static.swagup.com/platform/media/form/packs/SwagUp_-_Fulfillment_Internal_Test_--_Pack_Executive_.png',
+  allowInternationalShipping: false,
   headline: 'Welcome to CompanyName',
   body: 'We like to welcome you to our company with some small gifts. Click the button below to redeem it.',
   callToActionButtonText: 'Redeem Here',
@@ -195,7 +197,7 @@ const RedeemPagesCreate = () => {
       // slug: prepare(`${page.company.name || page.company}-${page.name}`),
       // theme,
       // product: page.product || page.products[0].image,
-      // isInternational: page.isInternational ? 1 : 0,
+      // allowInternationalShipping: page.allowInternationalShipping ? 1 : 0,
       // logo:
         // page.logo ||
         // page.company.logo ||
@@ -210,7 +212,7 @@ const RedeemPagesCreate = () => {
     return returnPage;
   };
   const queryClient = useQueryClient();
-  const createRedeem = useMutation(params => (id ? solutiontriangle.update(params) : solutiontriangle.create(params)), {
+  const createRedeem = useMutation(params => (id ? redeemPages.update(params) : redeemPages.create(params)), {
     onSuccess: () => {
       queryClient.invalidateQueries(['redeem']);
       return navigate('/swag-drop/redeems');
@@ -264,7 +266,7 @@ const RedeemPagesCreate = () => {
     if (currentStep === 1) return false;
     if (currentStep === 2) {
       return (
-        (!page.name || !page.header || !page.subtitle || !page.button || artworkLoader.length) &&
+        (!page.projectName || !page.headline || !page.body || !page.callToActionButtonText || artworkLoader.length) &&
         'Some required fields are missing'
       );
     }
@@ -380,7 +382,7 @@ const RedeemPagesCreate = () => {
                   <Grid container>
                     <Grid container justifyContent="flex-end">
                       <FormControlLabel
-                        label={`Status: ${getStatus(page.status)}`}
+                        label={`Status: ${getStatus(page.isActive)}`}
                         style={{ width: 150 }}
                         labelPlacement="top"
                         control={
