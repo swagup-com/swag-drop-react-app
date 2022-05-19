@@ -28,7 +28,7 @@ function App() {
         <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />}/>
-          <Route path="/swag-drop/:company/:page" element={<RedeemHome />} exact/>
+          <Route path="/swag-drop/landings/:page" element={<RedeemHome />} exact/>
           <Route path="/swag-drop/redeems" element={<HeaderWrapper component={RedeemPagesHome} />} />
           <Route path="/swag-drop/redeems-create" element={<HeaderWrapper component={RedeemPagesCreate} />} exact/>
           <Route path="/swag-drop/redeems/:id" element={<HeaderWrapper component={RedeemPagesCreate} />} exact/>

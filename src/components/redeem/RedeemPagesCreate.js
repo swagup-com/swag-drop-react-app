@@ -153,10 +153,10 @@ const RedeemPagesCreate = () => {
   const { data } = useQuery('redeem-details', () => redeemPages.get(id), {
     enabled: !!id
   });
-  const result = data?.data;
+  const originalPage = data?.data;
   useEffect(() => {
-    if (result?.id) setPage(result);
-  }, [result]);
+    if (originalPage?.id) setPage(originalPage);
+  }, [originalPage]);
 
   //const { data: company } = useCompany();
   const company = useMemo(() => ({ id: 3719, name: 'Weathervane' }), []);
@@ -191,7 +191,7 @@ const RedeemPagesCreate = () => {
     // const productsMap = page.products.filter(ap => accountProducts.results.some(p => p.id === ap.id));
     // const products = JSON.stringify(productsMap);
     // const theme = JSON.stringify(page.theme);
-    const returnPage = {
+    let returnPage = {
       ...page,
       // products,
       // slug: prepare(`${page.company.name || page.company}-${page.name}`),
@@ -206,13 +206,15 @@ const RedeemPagesCreate = () => {
         //   : 'https://images.squarespace-cdn.com/content/v1/583863c1e6f2e1216884123c/1501780550627-8WL59H2VU6ODTI4E00J7/image-asset.png?format=1000w'),
       // company: page.company.name,
       // company_id: page.company.id,
-      last_modified: dayjs().format('MM-DD-YY')
+      lastModified: dayjs().format('MM-DD-YY')
     };
+
+    if(id) returnPage = Object.keys(returnPage).reduce((rslt,  key) => returnPage[key] !== originalPage[key] && key !== 'company' ? {...rslt, [key]: returnPage[key] } : rslt, {})
 
     return returnPage;
   };
   const queryClient = useQueryClient();
-  const createRedeem = useMutation(params => (id ? redeemPages.update(params) : redeemPages.create(params)), {
+  const createRedeem = useMutation(params => (id ? redeemPages.update(page.id, params) : redeemPages.create(params)), {
     onSuccess: () => {
       queryClient.invalidateQueries(['redeem']);
       return navigate('/swag-drop/redeems');

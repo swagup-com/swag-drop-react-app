@@ -8,7 +8,7 @@ import { useDropzone } from 'react-dropzone';
 import styles from './styles/redeem';
 import { StandardCard } from '../shared/containers/Cards';
 import CircularCheckbox from '../shared/CircularCheckbox';
-import { s3 } from '../../utils/utils';
+import { adjustColor, pSBC, s3 } from '../../utils/utils';
 import { TableCell, TableRow } from '../shared/TableCommon';
 import { Link } from 'react-router-dom';
 import { Add, ChevronRight, Remove } from '@mui/icons-material';
@@ -30,9 +30,9 @@ const StatusChip = withStyles({
   }
 })(Chip);
 
-const defaultText = ({ color, fontFamily }) => ({
+const defaultText = ({ fontColor, fontFamily }) => ({
   fontFamily: fontFamily || 'Gilroy',
-  color: color || '#0b1829',
+  color: fontColor || '#0b1829',
   margin: 0
 });
 
@@ -64,7 +64,7 @@ const standardMediaQueries = (theme, fontSize, marginBottom) => ({
 const templateStyles = theme => ({
   root: {
     position: 'relative',
-    background: ({ background }) => background || 'transparent',
+    background: ({ backgroundColor }) => backgroundColor || 'transparent',
     padding: '0px 24px',
     flexDirection: 'column',
     display: 'flex',
@@ -112,7 +112,7 @@ const templateStyles = theme => ({
     width: '100%',
     objectFit: 'contain'
   },
-  headerText: props => ({ ...defaultText(props), fontSize: 72, marginBottom: 24, fontWeight: 700,
+  headerText: props => ({ ...defaultText(props), fontSize: 64, marginBottom: 24, fontWeight: 700,
     ...standardMediaQueries(theme, 72, 24) }),
   subtitle: props => ({ ...defaultText(props), fontSize: 20, fontWeight: 400, marginBottom: 24,
     ...standardMediaQueries(theme, 20, 24) }),
@@ -140,8 +140,8 @@ const templateStyles = theme => ({
     marginLeft: 4,
     // padding: '16px 42px !important',
     minWidth: '212px !important',
-    '&:disabled': { backgroundColor: 'rgba(0, 0, 0, 0.26) !important' },
-    backgroundColor: ({ accent }) => (`${accent || '#3577d4'} !important`),
+    '&:disabled': ({ accentColor }) => ({ backgroundColor: `${adjustColor(accentColor || '#3577d4',-0.9 )} !important` }),
+    backgroundColor: ({ accentColor }) => (`${accentColor || '#3577d4'} !important`),
     color: '#ffffff',
     borderRadius: '32px !important',
     '& span': {
@@ -235,7 +235,7 @@ const pageStatusStyles = {
 
 const getStatus = active => active ? 'published' : 'draft';
 const prepare = text => text.toLowerCase().replaceAll(' ', '-');
-const getPageLink = ({ company, name }) => company && name ? `/swag-drop/${prepare(company)}-${prepare(name)}` : '/';;
+const getPageLink = ({ urlSlug }) => urlSlug ? `/swag-drop/landings/${urlSlug}` : '/';;
 
 const RedeemPageCard = ({ page, selected }) => {
 const classes = useStyles(selected);
@@ -273,7 +273,7 @@ const classes = useStyles(selected);
             <Grid item>
               <Tooltip title="Last date modified" width={190} color="blue">
                 <p className={classes.designType} style={{ opacity: 0.5 }}>
-                  <span>{page.last_modified}</span>
+                  <span>{page.lastModified}</span>
                 </p>
               </Tooltip>
             </Grid>

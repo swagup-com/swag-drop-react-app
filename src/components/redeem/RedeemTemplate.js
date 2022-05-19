@@ -37,20 +37,21 @@ import { Button } from '@swagup-com/react-ds-components';
 
 const RedeemTemplates = ({ redeem, onSwagDrop, handleONext, currentStep, 
     generalError,
-    formError,
-    availableSizes }) => {
+    formError }) => {
     const {
-        name,
-        header,
-        subtitle,
-        logo,
-        product,
-        button,
-        company,
-        theme
+        projectName,
+        headline,
+        body,
+        clientLogo,
+        clientImage,
+        callToActionButtonText,
+        fontFamily,
+        backgroundColor,
+        fontColor,
+        accentColor,
+        apparelSizes
       } = redeem;
 
-      const { background, color, accent, fontFamily } = theme;
       const formMethods = useForm({
         resolver,
         mode: 'all',
@@ -65,13 +66,13 @@ const RedeemTemplates = ({ redeem, onSwagDrop, handleONext, currentStep,
     // setError(formError);
     }, [formError, setError]);
   
-    const classes = useTempletesStyles({ background, color, accent, fontFamily });
+    const classes = useTempletesStyles({ backgroundColor, fontColor, accentColor, fontFamily });
     return (
       <Grid container direction="column" className={classes.root}>
         <Grid item className={classes.header}>
             <a href={getPageLink(redeem)}>
                 <div className={classes.logoContainer}>
-                    <img src={logo} alt={name} className={classes.logo} />
+                    <img src={clientLogo} alt={projectName} className={classes.logo} />
                 </div>
             </a>
         </Grid>
@@ -80,10 +81,10 @@ const RedeemTemplates = ({ redeem, onSwagDrop, handleONext, currentStep,
             <div>
               <Grid container>
                 <Grid item sm={6} xs={12}>
-                  <p className={classes.headerText}>{header}</p>
-                  <p className={classes.subtitle}>{subtitle}</p>
+                  <p className={classes.headerText}>{headline}</p>
+                  <p className={classes.subtitle}>{body}</p>
                   <Button variant="primary" className={classes.button} onClick={handleONext}>
-                    {button}
+                    {callToActionButtonText}
                   </Button>
                   <p className={classes.advisory}>
                     Please include your current address to ensure an accurate delivery at this time. Please be aware, due
@@ -93,7 +94,7 @@ const RedeemTemplates = ({ redeem, onSwagDrop, handleONext, currentStep,
                 <Grid item sm={6} xs={12}>
                   <Grid container alignContent="center" style={{ height: '100%' }}>
                     <div className={classes.productContainer}>
-                      <img src={product} alt={name} className={classes.product} />
+                      <img src={clientImage} alt={projectName} className={classes.product} />
                     </div>
                   </Grid>
                 </Grid>
@@ -112,8 +113,8 @@ const RedeemTemplates = ({ redeem, onSwagDrop, handleONext, currentStep,
                       fixedCountry={!redeem.allowInternationalShipping}
                       noCompany
                       noTitle
-                      hideSizes={!redeem.products.some(p => p.is_apparel)}
-                      availableSizes={availableSizes}
+                      hideSizes={apparelSizes.length === 0}
+                      availableSizes={apparelSizes.map((s,idx) => ({id: idx + 1, name: s }))}
                     />
                   </FormProvider>
                 )}
@@ -145,7 +146,7 @@ const RedeemTemplates = ({ redeem, onSwagDrop, handleONext, currentStep,
             <p
               className={classes.advisory}
               style={{ marginTop: 56 }}
-            >{`© ${new Date().getFullYear()} by ${company} in Partnership with SwagUp`}</p>
+            >{`© ${new Date().getFullYear()} by ${'Weathervane'} in Partnership with SwagUp`}</p>
           </Grid>
          
         </Grid>

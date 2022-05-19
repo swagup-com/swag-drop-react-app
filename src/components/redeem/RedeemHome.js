@@ -16,6 +16,7 @@ import log from '../../utils/logger';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import RedeemTemplates from './RedeemTemplate';
+import { redeemPages } from '../../api/swagdrop';
 
 const useStyles = makeStyles(styles);
 
@@ -24,17 +25,18 @@ const RedeemHome = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [generalError, setGeneralError] = useState('');
-  const [availableSizes, setAvailableSizes] = useState([]);
+  // const [availableSizes, setAvailableSizes] = useState([]);
   const [formError, setFormError] = useState({});
 
   const [addressVerification, setAddressVerification] = useState({ address: {} });
 
 
-  const { company, page } = useParams();
-  const { data: redeem, isFetching } = useQuery('redeems', () => solutiontriangle.getbyslug(`${company}-${page}`), {
+  const { page } = useParams();
+  const { data: response, isFetching } = useQuery('redeems', () => redeemPages.get(page), {
     initialData: { theme: {}, products: [] },
-    enabled: !!(company && page)
+    enabled: !!page
   });
+const redeem = response?.data;
 
   const handleONext = () => {
     const futureStep = currentStep + 1;
@@ -48,18 +50,18 @@ const RedeemHome = () => {
     handleONext();
   };
 
-  useEffect(() => {
-    const setSizes = async () => {
-      try {
-        const { results: products } = await accountProductsApi.fetch({ ids: redeem?.products.map(p => p.id).join() });
-        const sizes = products.reduce((rslt, p) => [...rslt, ...p.stock.filter(s => s.quantity).map(s => s.size)], []);
-        setAvailableSizes(sizes);
-      } catch (e) {
-        log.debug('Error:', e);
-      }
-    };
-    setSizes();
-  }, [redeem.products]);
+  // useEffect(() => {
+  //   const setSizes = async () => {
+  //     try {
+  //       const { results: products } = await accountProductsApi.fetch({ ids: redeem?.products.map(p => p.id).join() });
+  //       const sizes = products.reduce((rslt, p) => [...rslt, ...p.stock.filter(s => s.quantity).map(s => s.size)], []);
+  //       setAvailableSizes(sizes);
+  //     } catch (e) {
+  //       log.debug('Error:', e);
+  //     }
+  //   };
+  //   setSizes();
+  // }, [redeem.products]);
 
   const prepareOrder = async shippingData => {
     const newContact = await contactsApi.addContact(shippingData);
@@ -138,30 +140,30 @@ const RedeemHome = () => {
     }
   };
 
-  const classes = useStyles(redeem.theme);
-  const templatedClasses = useTempletesStyles(redeem.theme);
+  const classes = useStyles(redeem);
+  const templatedClasses = useTempletesStyles(redeem);
 
   return (
     <div className={classes.container}>
       <CenteredGrid>
-        {redeem.status === 'draft' ? (
+        {!isFetching && (
+        redeem.isActive ? (
+          <RedeemTemplates
+            redeem={redeem}
+            onSwagDrop={onSwagDrop}
+            generalError={generalError}
+            formError={formError}
+            currentStep={currentStep}
+            handleONext={handleONext}
+          />
+        ) : (
           <PostMessage
             classes={templatedClasses}
             title="Under Construction"
             excerpt="We are launching soon. We are working hard. We are almost ready to launch. Something awesome is coming soon."
             handleONext={() => (window.location = '/')}
           />
-        ) : (
-          !isFetching && <RedeemTemplates
-            redeem={redeem}
-            onSwagDrop={onSwagDrop}
-            generalError={generalError}
-            formError={formError}
-            availableSizes={availableSizes}
-            currentStep={currentStep}
-            handleONext={handleONext}
-          />
-          )}
+          ))}
          <AddressConfirmation
             open={isModalOpen}
             onClose={handleClose}

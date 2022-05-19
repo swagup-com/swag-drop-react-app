@@ -68,7 +68,7 @@ const RedeemPageHistory = () => {
   } = usePaginatedQuery({
     queryKey: [apiPaths.employeeOrders, redeemShipmentsParams],
     queryFn: (limit, offset) => {
-      return shipmentsApi.fetch({ limit, offset, ...redeemShipmentsParams, isCancellable: false });
+      return { results: [] };//shipmentsApi.fetch({ limit, offset, ...redeemShipmentsParams, isCancellable: false });
     },
     enabled: !!page.id,
     perPageOptions
@@ -83,7 +83,7 @@ const RedeemPageHistory = () => {
   const { data: accountProductsQueryResult } = useQuery(
     [apiPaths.accountProducts, accountProductsParams],
     () => {
-      return accountProductsApi.fetch({ limit: 1000, offset: 0, ...accountProductsParams });
+      return { results: [] }; //accountProductsApi.fetch({ limit: 1000, offset: 0, ...accountProductsParams });
     },
     {
       enabled: !!page.id
