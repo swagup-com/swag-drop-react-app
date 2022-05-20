@@ -46,7 +46,6 @@ const ContactForm = ({ justAddress, fixedCountry, noCompany, noTitle, hideSizes,
         <SelectField
           name="shipping_country"
           error={errors.shipping_country?.message}
-          totalItems={countries.length}
           onSelectChange={onCountryChange}
           control={control}
           label="Country"
@@ -120,7 +119,6 @@ const ContactForm = ({ justAddress, fixedCountry, noCompany, noTitle, hideSizes,
             error={errors.size?.message}
             control={control}
             label="Shirt Size"
-            totalItems={sizes.length}
             defaultValue=""
             fullWidth
           >
@@ -130,7 +128,7 @@ const ContactForm = ({ justAddress, fixedCountry, noCompany, noTitle, hideSizes,
             {sizes
               ?.filter(s => !availableSizes || availableSizes.find(as => as.id === s.id))
               .map(size => (
-                <MenuItem key={size.id} value={size.id}>
+                <MenuItem key={size.id} value={size?.name}>
                   {size?.name}
                 </MenuItem>
               ))}
@@ -179,7 +177,6 @@ const ContactForm = ({ justAddress, fixedCountry, noCompany, noTitle, hideSizes,
             name="shipping_state"
             error={errors.shipping_state?.message}
             onSelectChange={onStateChange}
-            totalItems={provinces.length}
             label="State"
             control={control}
             fullWidth

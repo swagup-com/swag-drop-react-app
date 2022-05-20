@@ -8,15 +8,13 @@ import { PostMessage, useTempletesStyles } from './redeemCommon';
 import addressesApi from '../../api/swagup/addresses';
 import AddressConfirmation from '../shared/AddressConfirmation';
 import Loader from '../shared/Loader';
-import { shipmentsApi, contactsApi, accountProductsApi } from '../../api/swagup';
+import { shipmentsApi, contactsApi } from '../../api/swagup';
 import useShippingCutoffHour from '../../hooks/useShippingCutoffHour';
 import { minimumShippingDate } from '../../utils/commonDateFunctions';
-import solutiontriangle from  '../../api/solutiontriangle';
-import log from '../../utils/logger';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import RedeemTemplates from './RedeemTemplate';
-import { redeemPages } from '../../api/swagdrop';
+import { redeemPages, redemptions, verifications } from '../../api/swagdrop';
 
 const useStyles = makeStyles(styles);
 
@@ -46,7 +44,8 @@ const redeem = response?.data;
   };
   const handleClose = () => setIsModalOpen(false);
 
-  const handleAddressConfirmed = () => {
+  const handleAddressConfirmed = redemption => {
+    doRedeem(redemption);
     handleONext();
   };
 
@@ -102,6 +101,16 @@ const redeem = response?.data;
     return handleONext();
   };
 
+  const doRedeem = async redemption => {
+    
+    const result = await redemptions.create(redemption);
+    console.log('xxx!:', result);
+    if(result === 'error') 
+      return setGeneralError("There was an error when redeeming the information");
+
+    return handleONext();
+  };
+
   const onSwagDrop = async data => {
     const {
       shipping_address1,
@@ -112,23 +121,39 @@ const redeem = response?.data;
       shipping_country
     } = data;
     const sendAddress = {
-      shipping_address1,
-      shipping_address2,
-      shipping_city,
-      shipping_state,
-      shipping_zip,
-      shipping_country
+      addressLine1: shipping_address1,
+      addressLine2: shipping_address2,
+      city: shipping_city,
+      state: shipping_state,
+      zipCode: shipping_zip,
+      country: shipping_country
     };
     setIsLoading(true);
-    const { result, status } = await addressesApi.validate(sendAddress);
+    const validateAddress = await verifications.address(sendAddress);
     setIsLoading(false);
 
-    if (result === 'ok') {
-      sendSwag(data);
-    } else {
+    console.log('xxx: ', validateAddress);
+      
+    const coreData = {
+      redeemPageId: redeem.id,
+        firstName: data.first_name,
+        lastName:  data.last_name,
+        apparelSize: data.size,
+        phoneNumber: data.phone_number,
+        emailAddress: data.email
+    };
+
+    if (validateAddress.country) {
+      const redemption = {
+        ...coreData,
+        ...validateAddress
+      }
+      doRedeem(redemption);
+    } 
+    else if (validateAddress === 'The address could not be verified.') {
       setIsModalOpen(true);
       const address = {
-        ...data,
+        ...coreData,
         street: data.shipping_address1,
         secondary: data.shipping_address2,
         city: data.shipping_city,
@@ -138,6 +163,8 @@ const redeem = response?.data;
       };
       setAddressVerification(address);
     }
+    else
+      setGeneralError("There was an error when validating the address");
   };
 
   const classes = useStyles(redeem);
