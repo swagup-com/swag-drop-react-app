@@ -153,7 +153,7 @@ const RedeemPagesCreate = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const { data } = useQuery('redeem-details', () => redeemPages.get(id), {
+  const { data } = useQuery(['redeem-details', id], () => redeemPages.get(id), {
     enabled: !!id
   });
   const originalPage = data?.data;

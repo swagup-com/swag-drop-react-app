@@ -8,11 +8,10 @@ import { useDropzone } from 'react-dropzone';
 import styles from './styles/redeem';
 import { StandardCard } from '../shared/containers/Cards';
 import CircularCheckbox from '../shared/CircularCheckbox';
-import { adjustColor, pSBC, s3, uploadFile } from '../../utils/utils';
+import { adjustColor, s3, uploadFile } from '../../utils/utils';
 import { TableCell, TableRow } from '../shared/TableCommon';
 import { Link } from 'react-router-dom';
 import { Add, ChevronRight, Remove } from '@mui/icons-material';
-import ShipmentStatus from '../shared/ShipmentStatus';
 import StylessButton from '../shared/buttons';
 
 const StatusChip = withStyles({
@@ -233,7 +232,7 @@ const pageStatusStyles = {
   draft: { color: '#8d9299 !important', backgroundColor: '#ebeef2 !important' }
 };
 
-const getStatus = active => active ? 'published' : 'draft';
+const getStatus = active => active ? 'published' : 'drafted';
 const prepare = text => text.toLowerCase().replaceAll(' ', '-');
 const getPageLink = ({ urlSlug }) => urlSlug ? `/swag-drop/landings/${urlSlug}` : '/';;
 
@@ -281,7 +280,7 @@ const classes = useStyles(selected);
         </Grid>
         <Grid container justifyContent="flex-start">
           <Grid item xs>
-            <Button variant="text" component={Link} to={`/swag-drop/redeem-history/${page.urlSlug}`} className={classes.link} style={{ paddingLeft: 0, paddingRight: 0 }}>
+            <Button variant="text" component={Link} to={`/swag-drop/redeem-history/${page.urlSlug}`} className={classes.link} style={{ fontFamily: 'Gilroy', paddingLeft: 0, paddingRight: 0 }}>
               View SwagDrop Details
               <ChevronRight className={classes.linkIcon} />
             </Button>

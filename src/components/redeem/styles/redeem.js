@@ -208,6 +208,9 @@ const styles = theme => ({
     marginTop: 16,
     marginLeft: 32
   },
+  previousIcon: {
+    marginRight: 8
+  },
   allCheckbox: {
     paddingLeft: 0,
     width: 24,
