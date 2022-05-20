@@ -22,7 +22,7 @@ const useStyles = makeStyles({
   buttonText: {
     color: 'inherit',
     fontFamily: 'Gilroy-Medium',
-    fontSize: 12,
+    fontSize: 16,
     letterSpacing: 0,
     lineHeight: '8px'
   },

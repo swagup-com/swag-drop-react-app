@@ -160,6 +160,7 @@ const RedeemPageHistory = () => {
         </Grid>
         <Grid item xs={4} style={{ paddingLeft: 32, paddingTop: 24, paddingBottom: 56 }}>
           {/* {accountProducts.length > 0 && <ProductsCarousel products={accountProducts} />} */}
+          <p style={{ fontFamily: 'Gilroy', fontSize: 16, marginBottom: 56 }}>Products:</p>
           <ProductsCarousel products={[
             {
               id: 1,

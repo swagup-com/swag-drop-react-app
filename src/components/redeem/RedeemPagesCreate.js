@@ -142,7 +142,7 @@ const fontFamilies = [
   { value: 'Futura', label: 'Futura' }
 ];
 
-const themeVars = ['backgroundColor', 'fontColor', 'accentColor'];
+const themeVars = [{ key: 'backgroundColor', label: 'Background Color' }, {  key: 'fontColor', label: 'Font Color' }, { key: 'accentColor', label: 'Accent Color' } ];
 
 const RedeemPagesCreate = () => {
   const [page, setPage] = useState(dataTemplate);
@@ -220,7 +220,7 @@ const RedeemPagesCreate = () => {
       createRedeem.mutate(createPayloadPage(page));
     } else setCurrentStep(futureStep);
   };
-  const isThemeSelected = t => ['fontFamily', ...themeVars].every(key => page[key] === t[key]);
+  const isThemeSelected = t => ['fontFamily', ...themeVars.map(tv => t.key)].every(key => page[key] === t[key]);
 
   const { isLoading:  isNameQueryLoading } = useQuery([swagDropServicesApiPaths.verifyName, page.projectName],
     () => verifications.names({ projectName: page.projectName }),
@@ -349,23 +349,23 @@ const RedeemPagesCreate = () => {
                         <Grid item xs>
                           <Grid container>
                             {themeVars.map(tv => (
-                              <Grid item xs={4} key={tv}>
+                              <Grid item xs={4} key={tv.key}>
                                 <FormControlLabel
                                   className={classes.formControl}
                                   style={{ margin: '0px 16px 0px 0px' }}
                                   labelPlacement="top"
                                   control={
                                     <ColorInput
-                                      value={page[tv]}
+                                      value={page[tv.key]}
                                       className={classes.inputText}
                                       onChange={color =>
-                                        setPage(p => ({ ...p, [tv]: color }))
+                                        setPage(p => ({ ...p, [tv.key]: color }))
                                       }
                                     />
                                   }
                                   label={
-                                    <p style={{ fontSize: 12 }} className={classes.demoLabel}>
-                                      {tv.charAt(0).toUpperCase() + tv.slice(1)}
+                                    <p style={{ fontSize: 16 }} className={classes.demoLabel}>
+                                      {tv.label}
                                     </p>
                                   }
                                 />

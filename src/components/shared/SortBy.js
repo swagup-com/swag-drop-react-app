@@ -12,7 +12,7 @@ const useStyles = makeStyles({
   label: {
     color: ({ selected }) => (selected ? '#3577d4' : '#0b1829'),
     fontFamily: 'Gilroy-Medium',
-    fontSize: 14,
+    fontSize: '16px !important',
     lineHeight: '10px',
     letterSpacing: 0,
     margin: 0
@@ -20,7 +20,7 @@ const useStyles = makeStyles({
   menuItem: {
     width: 156,
     height: 24,
-    padding: '6px 0',
+    padding: '6px 4px',
     margin: '6px 0',
     display: 'flex',
     justifyContent: 'space-between',

@@ -169,6 +169,7 @@ const styles = theme => ({
   //   padding: '8px 24px !important'
   // },
   inputText:  {
+    fontSize: 16,
     '& input': {
       padding: '12px !important'
     }

@@ -11,9 +11,9 @@ const arrowStyles = {
     cursor: 'pointer',
     transition: '0.6s ease',
     userSelect: 'none',
-    width: 24,
-    height: 24,
-    borderRadius: 12,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     background: '#ffffff',
     boxShadow: '0px 12px 24px rgba(0, 0, 0, 0.1)',
     padding: 0,
@@ -49,9 +49,9 @@ const ProductsCarousel = ({ classes, products }) => {
         </Grid>
       </Grid>
 
-      <div style={{ paddingLeft: 32 }}>
+      <div style={{ paddingLeft: 32, paddingBottom: 12 }}>
         <p className={classes.packTitle}>{product.name}</p>
-        <p className={classes.statusText}>Available qty: {availableQty}</p>
+        <p className={classes.statusText} style={{ marginBotton: 12 }}>Available qty: {availableQty}</p>
       </div>
       <Grid
         item
@@ -66,7 +66,8 @@ const ProductsCarousel = ({ classes, products }) => {
               <Grid key={stock.size.id} item xs={3}>
                 <p
                   style={{
-                    fontSize: 12,
+                    marginTop: 16,
+                    fontSize: 16,
                     fontFamily: 'Gilroy',
                     textAlign: 'left',
                     fontWeight: stock.quantity ? 'bold' : 'lighter'
