@@ -23,7 +23,7 @@ queryClient.setDefaultOptions({
 function App() {
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
+      {/* <CssBaseline /> */}
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
         <Routes>

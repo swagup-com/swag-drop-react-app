@@ -4,6 +4,7 @@ import { changeColorLightness } from '../../shared/styles/utils';
 const styles = theme => ({
   container: {
     minHeight: '100vh',
+    position: 'relative',
     background: ({ backgroundColor }) => backgroundColor
   },
   title: {

@@ -23,7 +23,7 @@ const StatusChip = withStyles({
     backgroundColor: status?.backgroundColor || '#ebeef2'
   }),
   label: {
-    fontSize: 12,
+    fontSize: '12px !important',
     padding: 0,
     fontFamily: 'Gilroy-SemiBold'
   }
