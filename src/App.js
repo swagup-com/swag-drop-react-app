@@ -30,6 +30,7 @@ function App() {
           <Route path="/" element={<Home />}/>
           <Route path="/swag-drop/landings/:page" element={<RedeemHome />} exact/>
           <Route path="/swag-drop/redeems" element={<HeaderWrapper component={RedeemPagesHome} />} />
+          <Route path="/swag-drop/redeems-empty" element={<HeaderWrapper component={RedeemPagesHome} emptyState />} />
           <Route path="/swag-drop/redeems-create" element={<HeaderWrapper component={RedeemPagesCreate} />} exact/>
           <Route path="/swag-drop/redeems/:id" element={<HeaderWrapper component={RedeemPagesCreate} />} exact/>
           <Route path="/swag-drop/redeem-history/:id" element={<HeaderWrapper component={RedeemPageHistory} />} exact/>

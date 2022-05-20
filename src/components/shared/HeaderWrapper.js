@@ -2,7 +2,7 @@ import { Grid } from "@mui/material";
 import React from "react";
 import CenteredGrid from "./CenteredGrid";
 
-const HeaderWrapper = ({ component }) => {
+const HeaderWrapper = ({ component, emptyState }) => {
 const Content = component;
     return (
         <div style={{ height: '100vh' }}>
@@ -18,7 +18,7 @@ const Content = component;
                 </CenteredGrid>
             </div>
             <div style={{ height: 24 }} />
-            <Content />
+            <Content emptyState={emptyState}/>
         </div>
     );
 };

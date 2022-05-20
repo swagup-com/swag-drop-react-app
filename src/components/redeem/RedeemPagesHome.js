@@ -15,7 +15,7 @@ import { makeStyles } from '@mui/styles';
 import { redeemPages } from '../../api/swagdrop';
 
 const useStyles = makeStyles(styles);
-const RedeemPagesHome = () => {
+const RedeemPagesHome = ({ emptyState }) => {
   const classes = useStyles();
   const perPageOptions = usePerPageOptions();
   const company = { id: 3719 };
@@ -28,7 +28,7 @@ const RedeemPagesHome = () => {
   });
 
   const { data, isFetching } = queryResult;
-  const pages = data?.data || [];
+  const pages = emptyState? [] : data?.data || [];
   return (
     <CenteredGrid className={classes.root}>
       <Grid container justifyContent="space-between" alignItems="center">
