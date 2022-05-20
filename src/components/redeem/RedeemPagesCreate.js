@@ -220,7 +220,7 @@ const RedeemPagesCreate = () => {
       createRedeem.mutate(createPayloadPage(page));
     } else setCurrentStep(futureStep);
   };
-  const isThemeSelected = t => ['fontFamily', ...themeVars.map(tv => t.key)].every(key => page[key] === t[key]);
+  const isThemeSelected = t => ['fontFamily', ...themeVars.map(tv => tv.key)].every(key => page[key] === t[key]);
 
   const { isLoading:  isNameQueryLoading } = useQuery([swagDropServicesApiPaths.verifyName, page.projectName],
     () => verifications.names({ projectName: page.projectName }),
