@@ -340,7 +340,7 @@ const RedeemPagesCreate = () => {
                               />
                             }
                             label={
-                              <p style={{ fontSize: 12 }} className={classes.demoLabel}>
+                              <p style={{ fontSize: 16 }} className={classes.demoLabel}>
                                 Font Family
                               </p>
                             }

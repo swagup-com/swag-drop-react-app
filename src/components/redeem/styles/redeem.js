@@ -207,7 +207,8 @@ const styles = theme => ({
   },
   formControl: {
     marginTop: 16,
-    marginLeft: 32
+    marginLeft: 32,
+    fontSize: 16
   },
   previousIcon: {
     marginRight: 8
@@ -224,6 +225,52 @@ const styles = theme => ({
     '&.MuiCheckbox-colorSecondary.Mui-checked': {
       color: '#3577d4'
     }
+  },
+  separateProofButtonsContainer: {
+    marginTop: 16,
+    paddingTop: 10,
+    borderTop: '1px solid  #E5E7E8'
+  },
+  statusText: {
+    color: '#4A4F54',
+    fontFamily: 'Gilroy',
+    fontWeight: 400,
+    fontSize: 14,
+    textAlign: 'left',
+    marginTop: 8
+  },
+  packTitle: {
+    marginTop: 24,
+    color: '#131415',
+    fontFamily: 'Gilroy',
+    textAlign: 'left',
+    fontWeight: 600,
+    fontSize: 20
+  },
+  proofImg: {
+    width: 256,
+    height: 256,
+    objectFit: 'contain',
+    textAlign: 'center',
+    borderRadius: 15,
+    [theme.breakpoints.between('md', 'lg')]: { width: 200, height: 200 },
+    [theme.breakpoints.down('sm')]: { width: 256, height: 256 },
+    [theme.breakpoints.down('xs')]: { width: 200, height: 200 }
+  },
+  tableContainer: {
+    border: 'solid 1px #f0f2f5',
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
+    height: '100%',
+    overflow: 'hidden',
+    flex: 1,
+    minHeight: 44
+  },
+  goBackIcon: {
+    cursor: 'pointer',
+    fontSize: 16,
+    height: 16,
+    marginRight: 10
   }
 });
 export default styles;

@@ -159,7 +159,34 @@ const RedeemPageHistory = () => {
           </Grid>
         </Grid>
         <Grid item xs={4} style={{ paddingLeft: 32, paddingTop: 24, paddingBottom: 56 }}>
-          {accountProducts.length > 0 && <ProductsCarousel products={accountProducts} />}
+          {/* {accountProducts.length > 0 && <ProductsCarousel products={accountProducts} />} */}
+          <ProductsCarousel products={[
+            {
+              id: 1,
+              name: page.projectName,
+              image: page.clientImage,  
+              stock: [
+                {
+                  quantity: 20,
+                  size: { id: 1, name: 'XS'}
+                },
+                {
+                  quantity: 3,
+                  size: { id: 2, name: 'M'}
+                },
+                {
+                  quantity: 19,
+                  size: { id: 3, name: 'L'}
+                },
+                {
+                  quantity: 87,
+                  size: { id: 4, name: 'XL'}
+                }
+              ]
+            }
+          ]} 
+          classes={classes} 
+          />
         </Grid>
       </Grid>
       <DetailsModal order={selectedShipment} onClose={() => setSelectedShipment(null)} />
