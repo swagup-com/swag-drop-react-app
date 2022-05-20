@@ -183,6 +183,13 @@ const styles = theme => ({
       boxShadow: '0 32px 85px 0 rgba(12, 23, 18, 0.05)'
     }
   },
+  dataTemplateCustom: {
+    marginRight: 16,
+    borderRadius: 16,
+    padding: 12,
+    marginBottom: 16,
+    border: ({ selected }) => `1px solid #${selected ? '3577d4' : 'ebeef2'}`
+  },
   formControl: {
     marginTop: 16,
     marginLeft: 32

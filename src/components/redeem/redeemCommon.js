@@ -387,13 +387,13 @@ const RedemptionRow = ({ redemption, showDetails }) => {
   );
 };
 
-const TableEmptyState = () => {
+const TableEmptyState = ({ text, subText}) => {
   const classes = useStyles();
   return (
     <Grid container direction="column" justifyContent="center" alignItems="center" className={classes.emptyContainer}>
       <Img src="/images/public/magnifier-180x180.png" className={classes.emptyImg} alt="No recipients found" />
-      <span className={classes.emptytitle}>No associated shipment found</span>
-      <span className={classes.emptySubtitlep}>Remove filters to see all recipients</span>
+      <span className={classes.emptytitle}>{text || 'No associated shipment found'}</span>
+      <span className={classes.emptySubtitlep}>{subText || 'Remove filters to see all recipients'}</span>
     </Grid>
   );
 };

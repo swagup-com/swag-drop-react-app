@@ -10,11 +10,10 @@ const Home = () => (
         </p>
         <a
           className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
+          href="/swag-drop/redeems"
           rel="noopener noreferrer"
         >
-          Learn React
+          Redeem Pages Home
         </a>
       </header>
     </div>

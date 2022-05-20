@@ -8,9 +8,11 @@ const Content = component;
         <div style={{ height: '100vh' }}>
             <div style={{ backgroundColor: 'white' }}>
                 <CenteredGrid>
-                    <Grid container style={{ height: 56 }}>
+                    <Grid container style={{ height: 42, paddingTop: 4, paddingBottom: 4 }}>
                         <Grid item >
-                            <img src="/images/public/swagup-logo.png" alt="logo" style={{ objectFit: 'contain', height: '100%',  maxWidth: 224}}/>
+                            <a href="/">
+                                <img src="/images/public/su-logo.svg" alt="logo" style={{ objectFit: 'contain', height: '100%',  maxWidth: 224}}/>
+                            </a>
                         </Grid>
                     </Grid>
                 </CenteredGrid>

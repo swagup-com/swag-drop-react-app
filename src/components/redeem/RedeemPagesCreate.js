@@ -10,7 +10,8 @@ import CheckCircle from '@mui/icons-material/RadioButtonUnchecked';
 import CheckRounded from '@mui/icons-material/RadioButtonChecked';
 import SortBy from '../shared/SortBy';
 import styles from './styles/redeem';
-import { ColorInput, FileUploadZone, getStatus, prepare, prepareArtworkOnUploadIO, prepareArtworksOnS3, ProductCard } from './redeemCommon';
+import _ from 'lodash';
+import { ColorInput, FileUploadZone, getStatus, TableEmptyState, prepareArtworkOnUploadIO, prepareArtworksOnS3, ProductCard } from './redeemCommon';
 import { useCompany, usePaginatedQuery } from '../../hooks';
 import apiPaths from '../../utils/apiPaths';
 import accountProductsApi from '../../api/swagup/accountProducts';
@@ -19,7 +20,8 @@ import solutiontriangle from '../../api/solutiontriangle';
 import CenteredGrid from '../shared/CenteredGrid';
 import TemplatePreview from './TemplatePreview';
 import { makeStyles } from '@mui/styles';
-import { redeemPages } from '../../api/swagdrop';
+import { redeemPages, verifications } from '../../api/swagdrop';
+import swagDropServicesApiPaths from '../../utils/swagDropServicesApiPaths';
 
 const useStyles = makeStyles(styles);
 
@@ -58,10 +60,10 @@ const FormContainer = ({ children, title, step }) => {
   );
 };
 
-const PresetTemplate = ({ selected, onSelect, name, subtext, image }) => {
+const PresetTemplate = ({ selected, onSelect, name, subtext, image, isCustom }) => {
   const classes = useStyles({ selected });
   return (
-    <div role="button" onClick={onSelect} className={classes.dataTemplate}>
+    <div role="button" onClick={onSelect} className={isCustom ? classes.dataTemplateCustom : classes.dataTemplate}>
       <Grid container alignItems="center">
         <Grid item>
           <div style={{ height: 56, width: 56, border: '1px solid #787B80', borderRadius: 16 }}>
@@ -96,13 +98,13 @@ const templateFields = [
   {
     name: 'projectName',
     placeholder: 'Name your Redeem Page',
-    label: 'Name',
+    label: 'Redeem Project Name ',
     required: true
   },
   {
     name: 'headline',
-    placeholder: 'Edit your Redeem Page Header',
-    label: 'Header',
+    placpeholder: 'Edit your Redeem Page Header',
+    label: 'Page Header',
     required: true
   },
   {
@@ -146,6 +148,7 @@ const RedeemPagesCreate = () => {
   const [page, setPage] = useState(dataTemplate);
   const [currentStep, setCurrentStep] = useState(1);
   const [artworkLoader, setArtworkLoader] = useState([]);
+  const [nammingError, setNammingError] = useState();
   const classes = useStyles();
   const navigate = useNavigate();
   const { id } = useParams();
@@ -178,34 +181,18 @@ const RedeemPagesCreate = () => {
     ordering: '-created_at'
   };
 
-  const { query: queryResult, pagination } = usePaginatedQuery({
-    queryKey: [apiPaths.accountProducts, accountProductsParams],
-    queryFn: (limit, offset) => {
-      return accountProductsApi.fetch({ limit, offset, ...accountProductsParams });
-    },
-    perPageOptions
-  });
-  const accountProducts = queryResult.data;
+  // const { query: queryResult, pagination } = usePaginatedQuery({
+  //   queryKey: [apiPaths.accountProducts, accountProductsParams],
+  //   queryFn: (limit, offset) => {
+  //     return accountProductsApi.fetch({ limit, offset, ...accountProductsParams });
+  //   },
+  //   perPageOptions
+  // });
+  const accountProducts = { results: [] }; // queryResult.data;
 
   const createPayloadPage = () => {
-    // const productsMap = page.products.filter(ap => accountProducts.results.some(p => p.id === ap.id));
-    // const products = JSON.stringify(productsMap);
-    // const theme = JSON.stringify(page.theme);
     let returnPage = {
       ...page,
-      // products,
-      // slug: prepare(`${page.company.name || page.company}-${page.name}`),
-      // theme,
-      // product: page.product || page.products[0].image,
-      // allowInternationalShipping: page.allowInternationalShipping ? 1 : 0,
-      // logo:
-        // page.logo ||
-        // page.company.logo ||
-        // (page.theme.id === 1
-        //   ? 'https://images.squarespace-cdn.com/content/v1/583863c1e6f2e1216884123c/1501780578502-9VLVVYAWB2JLO86NWA0U/image-asset.jpeg?format=1000w'
-        //   : 'https://images.squarespace-cdn.com/content/v1/583863c1e6f2e1216884123c/1501780550627-8WL59H2VU6ODTI4E00J7/image-asset.png?format=1000w'),
-      // company: page.company.name,
-      // company_id: page.company.id,
       lastModified: dayjs().format('MM-DD-YY')
     };
 
@@ -235,7 +222,16 @@ const RedeemPagesCreate = () => {
   };
   const isThemeSelected = t => ['fontFamily', ...themeVars].every(key => page[key] === t[key]);
 
-  const onChange = ({ target: { value, name } }) => setPage({ ...page, [name]: value });
+  const { isLoading:  isNameQueryLoading } = useQuery([swagDropServicesApiPaths.verifyName, page.projectName],
+    () => verifications.names({ projectName: page.projectName }),
+    {
+      onSuccess: rslt => setNammingError(rslt?.available || rslt?.projectName === originalPage?.projectName ? '' : 'The current Project Name is already been used'),
+      enabled: page.projectName  !== originalPage?.projectName
+    }
+  );
+
+  
+  const onChange = async ({ target: { value, name } }) =>  setPage({ ...page, [name]: value });
 
   const handleOnSelect = ap =>
     setPage(pg => ({
@@ -267,10 +263,10 @@ const RedeemPagesCreate = () => {
   const errors = () => {
     if (currentStep === 1) return false;
     if (currentStep === 2) {
-      return (
-        (!page.projectName || !page.headline || !page.body || !page.callToActionButtonText || artworkLoader.length) &&
-        'Some required fields are missing'
-      );
+      if(!page.projectName || !page.headline || !page.body || !page.callToActionButtonText || artworkLoader.length)
+      return 'Some required fields are missing';
+      if (isNameQueryLoading) return "Validating Project Name...";
+      return page.projectName  !== originalPage?.projectName  && nammingError;
     }
     if (currentStep === 3)
       return (
@@ -323,9 +319,10 @@ const RedeemPagesCreate = () => {
                         name="Custom Theme"
                         subtext="Customize it yourself"
                         image="vector"
+                        isCustom
                       />
                     </Grid>
-                    <Grid item container xs={12} style={{ paddingTop: 32 }}>
+                    <Grid item container xs={12} style={{ paddingTop: 16 }}>
                       <Grid container>
                         <Grid item xs={3}>
                           <FormControlLabel
@@ -399,7 +396,7 @@ const RedeemPagesCreate = () => {
                     </Grid>
                     {templateFields.map(tf => (
                       <Grid item xs={tf.image ? 6 : 12} key={tf.name} style={{ paddingBottom: 12, paddingRight: 24 }}>
-                        <p style={{ marginBottom: 4, marginLeft: 24 }}>
+                        <p style={{ marginBottom: 4, marginLeft: 24, paddingTop: tf.image ? 16 : 0 }}>
                           {tf.label}
                           {tf.required && <strong>*</strong>}
                         </p>
@@ -417,10 +414,10 @@ const RedeemPagesCreate = () => {
                                 <img
                                   src={page[tf.name] || '/images/public/nopic.jpg'}
                                   alt={tf.name}
-                                  style={{ float: 'left', width: 20, height: 20, marginLeft: 16, borderRadius: 10 }}
+                                  style={{ float: 'left', width: 20, height: 20, marginLeft: 24, borderRadius: 10 }}
                                 />
                               )}
-                              <p style={{ margin: 'auto' }}>Drop or Click to Upload</p>
+                              <p style={{ margin: 'auto', marginLeft: 24 }}>Drop or Click to Upload</p>
                             </Grid>
                           </FileUploadZone>
                         ) : (
@@ -440,7 +437,7 @@ const RedeemPagesCreate = () => {
                     <Grid item>
                       <FormControlLabel
                         className={classes.formControl}
-                        style={{ margin: 0, marginTop: 24, marginLeft: 16 }}
+                        style={{ margin: 0, marginTop: 24, marginLeft: 22 }}
                         control={
                           <Checkbox
                             disableRipple
@@ -452,12 +449,13 @@ const RedeemPagesCreate = () => {
                             inputProps={{ 'aria-label': `Selection shortcut actions checkbox` }}
                           />
                         }
-                        label={<p className={classes.demoLabel}>Can Ship Internationally?</p>}
+                        label={<p style={{ marginLeft: 20 }} className={classes.demoLabel}>Can Ship Internationally?</p>}
                       />
                     </Grid>
                   </Grid>
                 </FormContainer>
                 <FormContainer title="Select your products" step={currentStep}>
+                  {accountProducts?.results?.length ? (
                   <CardsContainer className={classes.productCardsContainer}>
                     {accountProducts?.results?.map(ap => (
                       <ProductCard
@@ -470,6 +468,8 @@ const RedeemPagesCreate = () => {
                       />
                     ))}
                   </CardsContainer>
+                  )
+                  : (<TableEmptyState text="No products found" subText="You can products to you Inventory" />)}
                 </FormContainer>
               </SwipeableViews>
             </Grid>
