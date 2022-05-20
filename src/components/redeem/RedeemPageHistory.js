@@ -12,7 +12,7 @@ import { Button } from '@swagup-com/react-ds-components';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import styles from './styles/redeem';
-import { ShipmentRow, TableEmptyState, RedeemPageDeleteModal } from './redeemCommon';
+import { TableEmptyState, RedeemPageDeleteModal, RedemptionRow } from './redeemCommon';
 import { usePaginatedQuery } from '../../hooks';
 import apiPaths from '../../utils/apiPaths';
 import accountProductsApi from '../../api/swagup/accountProducts';
@@ -24,7 +24,8 @@ import Loader from '../shared/Loader';
 import CenteredGrid from '../shared/CenteredGrid';
 import Pagination from '../shared/Pagination';
 import { makeStyles } from '@mui/styles';
-import { redeemPages } from '../../api/swagdrop';
+import { redeemPages, redemptions } from '../../api/swagdrop';
+import swagDropServicesApiPaths from '../../utils/swagDropServicesApiPaths';
 
 
 export const statuses = {
@@ -57,24 +58,16 @@ const RedeemPageHistory = () => {
     if (result?.id) setPage(result);
   }, [result]);
 
-  const redeemShipmentsParams = {
-    source: `redeem-${page.id}`,
-    ordering: '-created_at'
-  };
+  
 
-  const {
-    query: { data: shipmentsQuery, isLoading, status },
-    pagination
-  } = usePaginatedQuery({
-    queryKey: [apiPaths.employeeOrders, redeemShipmentsParams],
-    queryFn: (limit, offset) => {
-      return { results: [] };//shipmentsApi.fetch({ limit, offset, ...redeemShipmentsParams, isCancellable: false });
-    },
-    enabled: !!page.id,
-    perPageOptions
-  });
+  const { data: redemptionsQuery, isLoading, status } = useQuery([swagDropServicesApiPaths.redemptions, page.id],
+    () => redemptions.list(page.id),
+    {
+      enabled: !!page.id
+    }
+  );
 
-  const shipments = shipmentsQuery?.results;
+  const redemptionList = redemptionsQuery?.data;
 
   const accountProductsParams = {
     ids: page.products?.map(p => p.id).join()
@@ -147,23 +140,22 @@ const RedeemPageHistory = () => {
               <Table stickyHeader>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Email</TableCell>
-                    <TableCell>Status</TableCell>
-                    <TableCell>Action</TableCell>
+                    <TableCell className={classes.headerCell}>Name</TableCell>
+                    <TableCell className={classes.headerCell}>Email</TableCell>
+                    <TableCell className={classes.headerCell}>Address</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {shipments?.map(shipment => (
-                    <ShipmentRow key={shipment.id} shipment={shipment} showDetails={setSelectedShipment} />
+                  {redemptionList?.map(redemption => (
+                    <RedemptionRow key={redemption.id} redemption={redemption} showDetails={setSelectedShipment} />
                   ))}
                 </TableBody>
               </Table>
             </TableContainer>
-            {shipments?.length === 0 && status === statuses.success && <TableEmptyState />}
+            {redemptionList?.length === 0 && status === statuses.success && <TableEmptyState />}
           </Grid>
           <Grid container alignItems="center" className={classes.paginationContainer}>
-            <Pagination {...pagination} startText="Show" endText="contacts" buttonClass={classes.paginationBtn} />
+            {/* <Pagination {...pagination} startText="Show" endText="contacts" buttonClass={classes.paginationBtn} /> */}
           </Grid>
         </Grid>
         <Grid item xs={4} style={{ paddingLeft: 32, paddingTop: 24, paddingBottom: 56 }}>

@@ -365,7 +365,7 @@ const ProductCard = ({ product, selected, onSelect, onSetQuanity, current }) => 
 };
 
 
-const ShipmentRow = ({ shipment, showDetails }) => {
+const RedemptionRow = ({ redemption, showDetails }) => {
   const classes = useStyles();
   // const [cellColor, cellValue] = showGroupNames
   //   ? ['#0b1829', contact.groups?.map(g => g.name).join(', ')]
@@ -373,18 +373,16 @@ const ShipmentRow = ({ shipment, showDetails }) => {
 
   return (
     <TableRow hover>
-      <TableCell scope="row" width="40%" style={{ fontFamily: 'Gilroy-Medium' }}>
-        {`${shipment.employee.first_name || ''} ${shipment.employee.last_name}`.trim()}
+      <TableCell className={classes.headerCell}  scope="row" width="40%" style={{ fontFamily: 'Gilroy-Medium' }}>
+        {`${redemption.firstName || ''} ${redemption.lastName}`.trim()}
       </TableCell>
-      <TableCell>{shipment.employee.email}</TableCell>
-      <TableCell>
-        <ShipmentStatus status={shipment.status} withTooltip lightStyle />
-      </TableCell>
-      <TableCell>
-        <Button variant="text" onClick={() => showDetails(shipment)} className={classes.link}>
+      <TableCell className={classes.headerCell}>{redemption.emailAddress}</TableCell>
+      <TableCell className={classes.headerCell}>{`${redemption.addressLine1}, ${redemption.city}, ${redemption.state}, ${redemption.zipCode}`}</TableCell>
+      {/* <TableCell>
+        <Button variant="text" onClick={() => showDetails(redemption)} className={classes.link}>
           View Details
         </Button>
-      </TableCell>
+      </TableCell> */}
     </TableRow>
   );
 };
@@ -539,7 +537,7 @@ export {
   prepareArtworksOnS3,
   prepareArtworkOnUploadIO,
   FileUploadZone,
-  ShipmentRow,
+  RedemptionRow,
   TableEmptyState,
   RedeemPageDeleteModal,
   ColorInput,

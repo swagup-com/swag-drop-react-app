@@ -25,6 +25,9 @@ const styles = theme => ({
     transition: 'all 1s',
     marginTop: 0
   },
+  headerCell: {
+    padding: '0px !important'
+  },
   imageContainer: {
     width: 220,
     height: 220

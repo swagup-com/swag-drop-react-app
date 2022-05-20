@@ -103,8 +103,7 @@ const redeem = response?.data;
 
   const doRedeem = async redemption => {
     
-    const result = await redemptions.create(redemption);
-    console.log('xxx!:', result);
+    const result = await redemptions.create(redemption)
     if(result === 'error') 
       return setGeneralError("There was an error when redeeming the information");
 
@@ -132,7 +131,6 @@ const redeem = response?.data;
     const validateAddress = await verifications.address(sendAddress);
     setIsLoading(false);
 
-    console.log('xxx: ', validateAddress);
       
     const coreData = {
       redeemPageId: redeem.id,

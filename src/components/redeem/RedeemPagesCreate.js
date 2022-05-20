@@ -452,7 +452,7 @@ const RedeemPagesCreate = () => {
                             inputProps={{ 'aria-label': `Selection shortcut actions checkbox` }}
                           />
                         }
-                        label={<p className={classes.demoLabel}>Is Interational?</p>}
+                        label={<p className={classes.demoLabel}>Can Ship Internationally?</p>}
                       />
                     </Grid>
                   </Grid>

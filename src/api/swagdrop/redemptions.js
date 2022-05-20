@@ -13,7 +13,7 @@ import { status200, status200or201 } from '../swagup/status.utils';
 // };
 
 export default {
-  list: params => axios.get(swagDropServicesApiPaths.redemptions, { status200 }).then(rslt => rslt).catch(() => []),
+  list: id  => axios.get(`${swagDropServicesApiPaths.redemptions}${id ? `/${id}` : 'x'}`, { status200 }).then(rslt => rslt).catch(() => []),
 
   create: params => axios.post(swagDropServicesApiPaths.redemptions, params, status200or201).then(rslt => rslt.data).catch(() => "error")
 };
