@@ -183,6 +183,20 @@ const styles = theme => ({
       boxShadow: '0 32px 85px 0 rgba(12, 23, 18, 0.05)'
     }
   },
+  emptytitle: {
+    fontFamily: 'Gilroy',
+    fontSize: 16,
+    lineHeight: 1.5,
+    textAlign: 'center',
+    color: '#0b1829'
+  },
+  emptySubtitle: {
+    fontFamily: 'Gilroy',
+    fontSize: 12,
+    lineHeight: 1.5,
+    textAlign: 'center',
+    color: '#0b1829'
+  },
   dataTemplateCustom: {
     marginRight: 16,
     borderRadius: 16,
