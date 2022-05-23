@@ -26,6 +26,8 @@ import Pagination from '../shared/Pagination';
 import { makeStyles } from '@mui/styles';
 import { redeemPages, redemptions } from '../../api/swagdrop';
 import swagDropServicesApiPaths from '../../utils/swagDropServicesApiPaths';
+import StylessButton from '../shared/buttons';
+import { Download } from '@mui/icons-material';
 
 
 export const statuses = {
@@ -93,13 +95,22 @@ const RedeemPageHistory = () => {
     }
   });
 
+  const contactExport = useMutation(i => redeemPages.export(i), {
+    onSuccess: () => {
+      queryClient.invalidateQueries(['redeem']);
+      setDeleteModalOpen(false);
+      return navigate('/swag-drop/redeems');
+    }
+  });
+
   const handleDeleteRedeem = () => {
     deleteRedeem.mutate(page.id);
   };
-
+  const exportContact = () => contactExport.mutate();
+  const [redeemedPeople, totalRedemptions] = [64, 92];
   return (
     <CenteredGrid className={classes.root} style={{ paddingTop: 0 }}>
-      <Grid container justifyContent="space-between" alignItems="center" style={{ marginBottom: 20, marginTop: 12 }}>
+      <Grid container justifyContent="space-between" alignItems="center" style={{ marginBottom: 0, marginTop: 12 }}>
         <Grid item xs={12}>
           <Link to="/swag-drop/redeems" className={classes.goBack}>
             <ArrowBackIcon className={classes.goBackIcon} />
@@ -135,6 +146,23 @@ const RedeemPageHistory = () => {
             minHeight: 528
           }}
         >
+        <Grid container  item xs  alignItems="center" style={{ marginBottom: 4 }}>
+          <Grid item xs>
+            <p>{redeemedPeople}/{totalRedemptions} redeemed people.</p>
+          </Grid>
+          <Grid item>
+            <StylessButton className={classes.exportButtom} disabled={totalRedemptions === 0} onClick={exportContact}>
+             <Grid container alignItems="center">
+               <Grid item  xs>
+                Export collected contacts
+               </Grid>
+               <Grid item style={{ paddingLeft: 4, paddingTop: 4 }}>
+                  <Download />
+               </Grid>
+             </Grid> 
+            </StylessButton>
+          </Grid>
+        </Grid>
           <Grid container direction="column" className={classes.tableContainer}>
             <TableContainer>
               <Table stickyHeader>

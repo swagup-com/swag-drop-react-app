@@ -20,4 +20,6 @@ export default {
   create: params => axios.post(swagDropServicesApiPaths.redeemPages, params, status200or201),
 
   update: (id, params) => axios.patch(swagDropServicesApiPaths.redeemPage(id), params),
+
+  export: id => axios.get(swagDropServicesApiPaths.export)
 };

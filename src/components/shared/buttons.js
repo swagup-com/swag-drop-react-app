@@ -36,7 +36,6 @@ export function StylessButton({
         <div
           style={{
             verticalAlign: 'middle',
-            fontFamily: 'Roboto',
             letterSpacing: 'normal',
             textAlign: 'center'
           }}

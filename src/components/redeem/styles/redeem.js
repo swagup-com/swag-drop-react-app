@@ -174,6 +174,15 @@ const styles = theme => ({
       padding: '12px !important'
     }
   },
+  exportButtom: {
+    padding: '0px 12px',
+    fontFamily: 'Gilroy',
+    cursor: 'pointer',
+    color: '3577d4',
+    '&:disabled': {
+      color: 'ebeef2'
+    }
+  },
   dataTemplate: {
     marginRight: 16,
     borderRadius: 16,
