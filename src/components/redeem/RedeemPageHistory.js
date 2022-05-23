@@ -106,7 +106,7 @@ const RedeemPageHistory = () => {
   const handleDeleteRedeem = () => {
     deleteRedeem.mutate(page.id);
   };
-  const exportContact = () => contactExport.mutate();
+  const exportContact = () => contactExport.mutate(page.id);
   const [redeemedPeople, totalRedemptions] = [64, 92];
   return (
     <CenteredGrid className={classes.root} style={{ paddingTop: 0 }}>

@@ -11,8 +11,9 @@ import CircularCheckbox from '../shared/CircularCheckbox';
 import { adjustColor, s3, uploadFile } from '../../utils/utils';
 import { TableCell, TableRow } from '../shared/TableCommon';
 import { Link } from 'react-router-dom';
-import { Add, ChevronRight, Remove } from '@mui/icons-material';
+import { Add, CheckBox, CheckCircle, CheckRounded, ChevronRight, Remove } from '@mui/icons-material';
 import StylessButton from '../shared/buttons';
+import Check from '@mui/icons-material/Check';
 
 const StatusChip = withStyles({
   root: ({ status }) => ({
@@ -397,6 +398,40 @@ const TableEmptyState = ({ text, subText}) => {
   );
 };
 
+
+const PresetTemplate = ({ selected, onSelect, name, subtext, image, isCustom }) => {
+  const classes = useStyles({ selected });
+  return (
+    <div role="button" onClick={onSelect} className={isCustom ? classes.dataTemplateCustom : classes.dataTemplate}>
+      <Grid container alignItems="center">
+        <Grid item>
+          <div style={{ height: 56, width: 56, border: '1px solid #787B80', borderRadius: 16 }}>
+            <img src={`/images/redeem/${image}.png`} alt={name} style={{ objectFit: 'scale-down', width: '100%' }} />
+          </div>
+        </Grid>
+        <Grid item xs>
+          <Grid container alignItems="center" style={{ paddingLeft: 32 }}>
+            <Grid item>
+              <p style={{ color: '#0B1829', fontFamily: 'Gilroy', fontSize: 20, fontWeight: 600, marginBottom: 4 }}>
+                {name}
+              </p>
+              <p style={{ color: '#787B80', fontFamily: 'Gilroy', fontSize: 14 }}>{subtext}</p>
+            </Grid>
+          </Grid>
+        </Grid>
+        <Grid item alignItems="center">
+          <Grid item>
+            {selected && (
+              <CheckCircle className={classes.linkIcon} style={{ height: 24, width: 24, color: '#3577D4' }} />
+            )}
+          </Grid>
+        </Grid>
+      </Grid>
+    </div>
+  );
+};
+
+
 const useModalStyles = makeStyles({
   text: {
     fontFamily: 'Gilroy-SemiBold',
@@ -538,6 +573,7 @@ export {
   FileUploadZone,
   RedemptionRow,
   TableEmptyState,
+  PresetTemplate,
   RedeemPageDeleteModal,
   ColorInput,
   getStatus,
