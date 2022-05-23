@@ -255,7 +255,7 @@ const RedeemPagesCreate = () => {
     setArtworkLoader(al => [...al, property]);
     const image = acceptedFiles[0];
     // const filePath = URL.createObjectURL(image);
-    const uploaded = await prepareArtworkOnUploadIO(image);
+    const uploaded = await prepareArtworksOnS3(image);
     setPage(p => ({ ...p, [property]: uploaded.url }));
     setArtworkLoader(al => al.filter(a => a !== property));
   };
