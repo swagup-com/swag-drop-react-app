@@ -170,7 +170,7 @@ const templateStyles = theme => ({
     }
   },
   shipSwagFormContainer: {
-    padding: '24px 142px',
+    padding: '24px 0px',
     paddingBottom: 156,
     background: ({ background }) => background || 'transparent',
     textAlign: 'left',

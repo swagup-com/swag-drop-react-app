@@ -4,7 +4,7 @@ const swagDropServicesApiPaths = {
   redemptions: 'redemptions',
   verifyAddress: '/verifications/verify-address',
   verifyName: '/verifications/verify-project-name',
-  export: id => `/export/${id}` 
+  export: id => `/redemptions/export/${id}` 
 };
 
 export default swagDropServicesApiPaths;
