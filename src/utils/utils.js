@@ -135,6 +135,21 @@ function adjustColor(color, amount) {
   return '#' + color.replace(/^#/, '').replace(/../g, color => ('0'+Math.min(255, Math.max(0, parseInt(color, 16) + amount)).toString(16)).substr(-2));
 }
 
+const downloadData = (filename, data) => {
+  const blob = new Blob([data], {type: 'text/csv'});
+  if(window.navigator.msSaveOrOpenBlob) {
+      window.navigator.msSaveBlob(blob, filename);
+  }
+  else{
+      const elem = window.document.createElement('a');
+      elem.href = window.URL.createObjectURL(blob);
+      elem.download = filename;        
+      document.body.appendChild(elem);
+      elem.click();        
+      document.body.removeChild(elem);
+  }
+};
+
 export {
   uploadFile,
   adjustColor,
@@ -143,6 +158,7 @@ export {
   errorAndLog,
   getMatchAddress,
   contentAppJSON,
+  downloadData,
   s3,
   getEstimatedDeliveryMsg,
   moneyStr,

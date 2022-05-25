@@ -28,6 +28,7 @@ import { redeemPages, redemptions } from '../../api/swagdrop';
 import swagDropServicesApiPaths from '../../utils/swagDropServicesApiPaths';
 import StylessButton from '../shared/buttons';
 import { Download } from '@mui/icons-material';
+import { downloadData } from '../../utils/utils';
 
 
 export const statuses = {
@@ -96,10 +97,8 @@ const RedeemPageHistory = () => {
   });
 
   const contactExport = useMutation(i => redeemPages.export(i), {
-    onSuccess: () => {
-      queryClient.invalidateQueries(['redeem']);
-      setDeleteModalOpen(false);
-      return navigate('/swag-drop/redeems');
+    onSuccess: ({ data }) => {
+     downloadData(`${page.projectName}.csv`, data)
     }
   });
 
