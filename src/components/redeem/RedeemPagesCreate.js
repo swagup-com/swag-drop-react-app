@@ -362,7 +362,7 @@ const RedeemPagesCreate = () => {
                     </Grid>
                     {templateFields.map(tf => (
                       <Grid item xs={tf.image ? 6 : 12} key={tf.name} style={{ paddingBottom: 12, paddingRight: 24 }}>
-                        <p style={{ marginBottom: 4, marginLeft: 24, paddingTop: tf.image ? 16 : 0 }}>
+                        <p style={{ color: '#4A4F54', fontSize: 14, marginBottom: 4, marginLeft: 24, paddingTop: tf.image ? 16 : 0 }}>
                           {tf.label}
                           {tf.required && <strong>*</strong>}
                         </p>
