@@ -21,5 +21,5 @@ export default {
 
   update: (id, params) => axios.patch(swagDropServicesApiPaths.redeemPage(id), params),
 
-  export: id => axios.get(swagDropServicesApiPaths.export)
+  export: id => axios.get(swagDropServicesApiPaths.export(id))
 };

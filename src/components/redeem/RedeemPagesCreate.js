@@ -11,7 +11,7 @@ import CheckRounded from '@mui/icons-material/RadioButtonChecked';
 import SortBy from '../shared/SortBy';
 import styles from './styles/redeem';
 import _ from 'lodash';
-import { ColorInput, FileUploadZone, getStatus, TableEmptyState, prepareArtworkOnUploadIO, prepareArtworksOnS3, ProductCard } from './redeemCommon';
+import { ColorInput, FileUploadZone, getStatus, TableEmptyState, prepareArtworkOnUploadIO, PresetTemplate, ProductCard } from './redeemCommon';
 import { useCompany, usePaginatedQuery } from '../../hooks';
 import apiPaths from '../../utils/apiPaths';
 import accountProductsApi from '../../api/swagup/accountProducts';
@@ -56,40 +56,6 @@ const FormContainer = ({ children, title, step }) => {
       >{`Step ${step}/3`}</p>
       <p className={classes.stepTitle}>{title}</p>
       <div className={classes.stepContainer}>{children}</div>
-    </div>
-  );
-};
-
-const PresetTemplate = ({ selected, onSelect, name, subtext, image, isCustom }) => {
-  const classes = useStyles({ selected });
-  return (
-    <div role="button" onClick={onSelect} className={isCustom ? classes.dataTemplateCustom : classes.dataTemplate}>
-      <Grid container alignItems="center">
-        <Grid item>
-          <div style={{ height: 56, width: 56, border: '1px solid #787B80', borderRadius: 16 }}>
-            <img src={`/images/redeem/${image}.png`} alt={name} style={{ objectFit: 'scale-down', width: '100%' }} />
-          </div>
-        </Grid>
-        <Grid item xs>
-          <Grid container alignItems="center" style={{ paddingLeft: 32 }}>
-            <Grid item>
-              <p style={{ color: '#0B1829', fontFamily: 'Gilroy', fontSize: 20, fontWeight: 600, marginBottom: 4 }}>
-                {name}
-              </p>
-              <p style={{ color: '#787B80', fontFamily: 'Gilroy', fontSize: 14 }}>{subtext}</p>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item alignItems="center">
-          <Grid item>
-            {selected ? (
-              <CheckRounded className={classes.linkIcon} style={{ height: 24, width: 24, color: '#3577D4' }} />
-            ) : (
-              <CheckCircle className={classes.linkIcon} style={{ height: 24, width: 24, color: '#3577D4' }} ss />
-            )}
-          </Grid>
-        </Grid>
-      </Grid>
     </div>
   );
 };
@@ -255,7 +221,7 @@ const RedeemPagesCreate = () => {
     setArtworkLoader(al => [...al, property]);
     const image = acceptedFiles[0];
     // const filePath = URL.createObjectURL(image);
-    const uploaded = await prepareArtworksOnS3(image);
+    const uploaded = await prepareArtworkOnUploadIO(image);
     setPage(p => ({ ...p, [property]: uploaded.url }));
     setArtworkLoader(al => al.filter(a => a !== property));
   };
@@ -396,7 +362,7 @@ const RedeemPagesCreate = () => {
                     </Grid>
                     {templateFields.map(tf => (
                       <Grid item xs={tf.image ? 6 : 12} key={tf.name} style={{ paddingBottom: 12, paddingRight: 24 }}>
-                        <p style={{ marginBottom: 4, marginLeft: 24, paddingTop: tf.image ? 16 : 0 }}>
+                        <p style={{ color: '#4A4F54', fontSize: 14, marginBottom: 4, marginLeft: 24, paddingTop: tf.image ? 16 : 0 }}>
                           {tf.label}
                           {tf.required && <strong>*</strong>}
                         </p>

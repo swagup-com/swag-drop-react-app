@@ -49,7 +49,7 @@ const RedeemTemplates = ({ redeem, onSwagDrop, handleONext, currentStep,
         backgroundColor,
         fontColor,
         accentColor,
-        apparelSizes
+        apparelSizes = []
       } = redeem;
 
       const formMethods = useForm({
@@ -115,6 +115,7 @@ const RedeemTemplates = ({ redeem, onSwagDrop, handleONext, currentStep,
                       noTitle
                       hideSizes={apparelSizes.length === 0}
                       availableSizes={apparelSizes.map((s,idx) => ({id: idx + 1, name: s }))}
+                      redeem={redeem}
                     />
                   </FormProvider>
                 )}
@@ -125,7 +126,7 @@ const RedeemTemplates = ({ redeem, onSwagDrop, handleONext, currentStep,
                     </p>
                   </div>
                 )}
-                <Grid container justifyContent="center">
+                {/* <Grid container justifyContent="center">
                   <Button
                     variant="primary"
                     type="submit"
@@ -135,7 +136,7 @@ const RedeemTemplates = ({ redeem, onSwagDrop, handleONext, currentStep,
                   >
                     Send
                   </Button>
-                </Grid>
+                </Grid> */}
               </form>
             </div>
             <PostMessage classes={classes} title="Thanks" excerpt="And come back soon. 😉" handleONext={handleONext} />
