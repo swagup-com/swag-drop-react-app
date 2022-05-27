@@ -6,10 +6,15 @@ import { TextField, SelectField, PhoneField } from '../shared/reactHookFormField
 import { useCountries, useMemoizeStateFields, useSizes } from '../../hooks';
 import SwipeableViews from 'react-swipeable-views/lib/SwipeableViews';
 import { useTempletesStyles } from '../redeem/redeemCommon';
-import { Button, Tooltip } from '@swagup-com/react-ds-components';
+import { Button } from '@swagup-com/react-ds-components';
 import { KeyboardBackspace } from '@mui/icons-material';
+import { Link } from 'react-router-dom';
 
-const ContactForm = ({ justAddress, fixedCountry, noCompany, noTitle, hideSizes, availableSizes, redeem }) => {
+const validationFields = [
+  ['first_name', 'last_name', 'email', 'phone_number'],
+  ['country', 'shipping_address1', 'shipping_address2', 'shipping_city', 'shipping_state', 'shipping_zip']
+]
+const ContactForm = ({ justAddress, fixedCountry, noCompany, noTitle, hideSizes, availableSizes, redeem, setCanSubmit}) => {
   const { control, formState, register, setValue, trigger, watch, getValues } = useFormContext();
   const { errors, touchedFields } = formState;
   const [country, state] = watch(['shipping_country', 'shipping_state']);
@@ -45,22 +50,25 @@ const ContactForm = ({ justAddress, fixedCountry, noCompany, noTitle, hideSizes,
     }
   };
 
-  const handleONext = () =>  setCurrentStep(prev => prev !==  2 ? prev + 1 : prev);
-
-  const handleOnPrevious = () =>  setCurrentStep(prev => prev !==  1 ? prev - 1 : prev);
-
-  const errorTexts  = () => {
-    if(!errors) return '';
-    const keys = Object.keys(errors);
-    console.log('xxx: ', errors);
-    return errors[keys[0]] || '';
+  const handleONext = () =>  {
+    setCanSubmit(currentStep === 2);
+    setCurrentStep(prev => prev !==  2 ? prev + 1 : prev);
   };
 
+  const handleOnPrevious = () => setCurrentStep(prev => prev !==  1 ? prev - 1 : prev);
+
+  const cantContinue = () => validationFields[currentStep - 1].find(vf => errors[vf]) || (currentStep === 2  && !formState.isValid) || touchedFirstStep();
+  const touchedFirstStep = () => currentStep === 1 && (!validationFields[0].filter(f => f !=='first_name').find(vf => touchedFields[vf]) || !validationFields[0].filter(f => f !=='last_name').find(vf => touchedFields[vf]));
+   
   const classes = useTempletesStyles(redeem);
+  const previousProps = currentStep === 1 ? { component: Link, to: `/swag-drop/landings/${redeem.urlSlug}`} : {};
 
   return (
     <Grid container>
       <Grid item xs={6}>
+        <p className={classes.callToActionText}>{redeem?.callToActionButtonText}</p>
+        <p className={classes.step}>Step {currentStep + 1}/2</p>
+        <p className={classes.formStepCaption}>{currentStep === 1 ? "Personal Details" : "Your Address"}</p>
         <SwipeableViews axis="x" index={currentStep - 1} className={classes.swipeableViews} disabled>
             <Grid container spacing={4}>
               <Grid item xs={12}>
@@ -225,29 +233,26 @@ const ContactForm = ({ justAddress, fixedCountry, noCompany, noTitle, hideSizes,
                 </Grid>
               </Grid>
         </SwipeableViews>
-        <Grid item container className={classes.wizardFooter}>
-              <Grid item xs={4}>
-                <Button size="small" variant="text" onClick={handleOnPrevious} className={classes.previous} fullWidth>
+        <Grid item container alignItems="center" className={classes.wizardFooter}>
+              <Grid item>
+                <Button size="small" variant="text" href='' onClick={handleOnPrevious} className={classes.wizardButtonPrev} fullWidth {...previousProps}>
                   <KeyboardBackspace className={classes.previousIcon} />
-                  Previous step
+                  {currentStep === 1 ? 'Home' : 'Previous step'}
                 </Button>
               </Grid>
               <Grid xs item />
-              <Grid item xs={3}>
-                {/* <Tooltip title={<p>{errorTexts()}</p>} disableHoverListener={!errors}> */}
-                  <div>
-                    <Button
-                      size="small"
-                      variant="primary"
-                      onClick={handleONext}
-                      fullWidth
-                      // disabled={cantContinue}
-                      // loading={createRedeem.isLoading}
-                    >
-                      Continue
-                    </Button>
-                  </div>
-                {/* </Tooltip> */}
+              <Grid item>
+                <Button
+                  size="small"
+                  variant="primary"
+                  className={classes.button} 
+                  type={currentStep === 2 ? 'submit' : 'button'}
+                  onClick={handleONext}
+                  fullWidth
+                  disabled={cantContinue()}
+                >
+                  {currentStep === 2 ? 'Redeem' : 'Continue'}
+                </Button>
               </Grid>
             </Grid>
       </Grid>

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Grid } from "@mui/material";
 import _ from 'lodash';
@@ -35,7 +35,7 @@ import { Button } from '@swagup-com/react-ds-components';
     })
   );
 
-const RedeemTemplates = ({ redeem, onSwagDrop, handleONext, currentStep, 
+const RedeemTemplates = ({ redeem, onSwagDrop, handleONext, currentStep, setCanSubmit,
     generalError,
     formError }) => {
     const {
@@ -58,13 +58,13 @@ const RedeemTemplates = ({ redeem, onSwagDrop, handleONext, currentStep,
         defaultValues: { shipping_country: redeem.allowInternationalShipping ? undefined : 'US' }
       });
     
-    const { formState, handleSubmit, setError } = formMethods;
-    const isValid = _.isEmpty(formState.errors);
-    const disableButton = !(isValid && formState.isDirty && formState.isValid);
+    const { handleSubmit } = formMethods;
+    // const isValid = _.isEmpty(formState.errors);
+    // const disableButton = !(isValid && formState.isDirty && formState.isValid);
    
-    useEffect(() => {
-    // setError(formError);
-    }, [formError, setError]);
+    // useEffect(() => {
+    // // setError(formError);
+    // }, [formError, setError]);
   
     const classes = useTempletesStyles({ backgroundColor, fontColor, accentColor, fontFamily });
     return (
@@ -101,12 +101,8 @@ const RedeemTemplates = ({ redeem, onSwagDrop, handleONext, currentStep,
               </Grid>
             </div>
             <div className={classes.shipSwagFormContainer}>
+              {}
               <form onSubmit={handleSubmit(onSwagDrop)}>
-                <Grid container justifyContent="center">
-                  <p className={classes.formTitle}>
-                    Fill out the following form and get your swag
-                  </p>
-                </Grid>
                 {currentStep === 2 && (
                   <FormProvider {...formMethods}>
                     <ContactForm
@@ -116,6 +112,7 @@ const RedeemTemplates = ({ redeem, onSwagDrop, handleONext, currentStep,
                       hideSizes={apparelSizes.length === 0}
                       availableSizes={apparelSizes.map((s,idx) => ({id: idx + 1, name: s }))}
                       redeem={redeem}
+                      setCanSubmit={setCanSubmit}
                     />
                   </FormProvider>
                 )}
@@ -126,17 +123,6 @@ const RedeemTemplates = ({ redeem, onSwagDrop, handleONext, currentStep,
                     </p>
                   </div>
                 )}
-                {/* <Grid container justifyContent="center">
-                  <Button
-                    variant="primary"
-                    type="submit"
-                    className={classes.button}
-                    style={{ marginLeft: 0, marginTop: generalError ? 10 : 42, width: 320 }}
-                    disabled={disableButton}
-                  >
-                    Send
-                  </Button>
-                </Grid> */}
               </form>
             </div>
             <PostMessage classes={classes} title="Thanks" excerpt="And come back soon. 😉" handleONext={handleONext} />

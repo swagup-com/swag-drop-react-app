@@ -23,6 +23,7 @@ const RedeemHome = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [generalError, setGeneralError] = useState('');
+  const [canSubmit, setCanSubmit] = useState(false);
   // const [availableSizes, setAvailableSizes] = useState([]);
   const [formError, setFormError] = useState({});
 
@@ -109,8 +110,9 @@ const redeem = response?.data;
 
     return handleONext();
   };
-
+  
   const onSwagDrop = async data => {
+    if(!canSubmit) return;
     const {
       shipping_address1,
       shipping_address2,
@@ -180,6 +182,7 @@ const redeem = response?.data;
             formError={formError}
             currentStep={currentStep}
             handleONext={handleONext}
+            setCanSubmit={setCanSubmit}
           />
         ) : (
           <PostMessage

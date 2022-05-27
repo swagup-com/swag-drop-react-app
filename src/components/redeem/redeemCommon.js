@@ -136,8 +136,6 @@ const templateStyles = theme => ({
     objectFit: 'contain'
   },
   button: {
-    marginTop: 24,
-    marginLeft: 4,
     // padding: '16px 42px !important',
     minWidth: '212px !important',
     '&:disabled': ({ accentColor }) => ({ backgroundColor: `${adjustColor(accentColor || '#3577d4',-0.9 )} !important` }),
@@ -191,7 +189,34 @@ const templateStyles = theme => ({
     // position: 'fixed',
     // left: '0px',
     // bottom: '0vh'
-  }
+  },
+  previousIcon:  {
+    marginRight: 8
+  },
+  wizardFooter: {
+    paddingTop: 24
+  },
+  wizardButtonPrev: {
+    width: 'auto !important',
+    padding: '0px !important',
+    color: ({ accentColor }) => (`${accentColor || '#3577d4'} !important`)
+  },
+  callToActionText: props => ({ 
+    ...defaultText(props), fontWeight: 400,
+    fontSize: 16,
+    marginBottom: 32
+  }),
+  step: props => ({ 
+    ...defaultText(props), fontWeight: 400,
+    fontSize: 14,
+    color: '#787B80',
+    marginBottom: 16
+  }),
+  formStepCaption: props => ({ 
+    ...defaultText(props), fontWeight: 400,
+    fontSize: 36,
+    marginBottom: 24
+  })
 });
 
 const useTempletesStyles = makeStyles(templateStyles);
