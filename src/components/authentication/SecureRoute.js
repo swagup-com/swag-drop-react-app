@@ -30,7 +30,12 @@ const RequireAuth = ({ children }) => {
       if (!isAuthenticated) {
        
           const originalUri = window.location.pathname; // history.createHref(history.location);
-          oktaAuth.signInWithRedirect({ originalUri });
+          oktaAuth.signInWithRedirect({
+            prompt: 'consent',
+            responseType: 'id_token',
+            scopes: ['openid',  'offline_access'],
+            originalUri
+          });
         return null;
       }
       setSignedIn(true);

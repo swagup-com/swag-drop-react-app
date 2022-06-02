@@ -12,7 +12,8 @@ const TokenInterceptor = ({ children }) => {
   const addAuthInterceptor = (axiosInstance) => axiosInstance.interceptors.request.use(
     async (config) => {
       const token = await oktaAuth.getAccessToken();
-      console.log('request interceptor, config:', config, token);
+      const rToken = await oktaAuth.getRefreshToken();
+      console.log('request interceptor, config:', rToken);
       return token
         ? {
           ...config,

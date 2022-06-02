@@ -9,7 +9,7 @@ const AxiosTokenInterceptor = ({ axios }) => {
 
   const addAuthInterceptor = (axiosInstance) => axiosInstance.interceptors.request.use(
     async (config) => {
-      const token = 'await oktaAuth.getAccessToken()';
+      const token = await oktaAuth.getAccessToken();
       console.log('request interceptor, config:', config);
       return token
         ? {
